@@ -1,0 +1,184 @@
+//PARAMS
+parameter delta.
+
+
+
+// functions
+
+function peridown{
+print apoapsis.
+print periapsis.
+print "New apoapsis will be "+delta.
+
+// get new apo
+set newperi to delta.
+print "==============".
+print newperi.
+print "==============".
+
+
+until eta:apoapsis <= 35{
+clearscreen.
+print "==============".
+print "time to apo " + eta:apoapsis.
+print "==============".
+}
+print "running in 5".
+
+//wait to apoapsis
+wait until eta:apoapsis <= 30.
+lock steering to heading (90,180).
+wait until eta:apoapsis <= 10.
+print "==============".
+print "10 seconds to burn".
+print "==============".
+
+//set heading to 180
+lock seteering to heading (90,180).
+wait 10.
+
+//start burn
+lock throttle to 1.
+
+
+//wait until apoapsis =target
+wait until periapsis <= newperi.
+
+//stop burn
+print "destination orbit acieved".
+print "==============".
+wait 5.
+lock throttle to 0.
+
+print "running circularization".
+wait 5.
+//run circatperi1.
+print "circularization complete".
+wait 5.
+
+
+lock throttle to 0.
+set ship:control:pilotmainthrottle to 0.
+
+}
+
+
+function apoup{
+//parameter delta.
+
+print "==============".
+print round(apoapsis).
+print round(periapsis).
+print "==============".
+print "New apoapsis set to " + round(delta).
+print "==============".
+wait 5.
+
+// get new apo
+set newapo to delta.
+wait 5.
+
+until eta:periapsis <= 40{
+clearscreen.
+print "time to peri " + round(eta:periapsis).
+wait 5.
+print "time to peri " + round(eta:periapsis).
+wait 1.
+}
+print "running in 10".
+
+//wait to apoapsis
+wait until eta:periapsis <= 30.
+lock steering to heading (90,0).
+wait until eta:periapsis <= 10.
+print "==============".
+print "10 seconds to burn".
+print "==============".
+
+//set heading to 0
+lock seteering to heading (90,0).
+wait 10.
+
+//start burn
+lock throttle to 1.
+
+//wait until apoapsis =target
+wait until apoapsis >= newapo.
+
+//stop burn
+print "==============".
+print "burn complete".
+lock throttle to 0.
+wait 5.
+
+print "==============".
+print "running circularize".
+wait 5.
+//run circularize1.
+
+lock throttle to 0.
+set ship:control:pilotmainthrottle to 0.
+}
+
+
+
+//////////////////////////
+//main
+//////////////////////////
+
+clearscreen.
+sas off.
+lock throttle to 0.
+
+print "changing orbit".
+print "new orbit of" + delta.
+
+run eccentricity.
+
+wait 5.
+
+if delta = 0 {
+ print "==============".
+ print "cannot divide by 0".
+ print "==============".
+
+ }
+
+
+set myapo to apoapsis.
+
+
+if delta > myapo {
+print "==============".
+print "orders received".
+print "==============".
+print "raising orbit".
+print "==============".
+wait 5.
+ApoUp.
+
+print "==============".
+print "orders complete".
+wait 5.
+}
+
+if delta < myapo{
+print "==============".
+print "orders received".
+print "==============".
+print "lowering orbit".
+print "==============".
+wait 5.
+peridown.
+
+print "==============".
+print "orders complete".
+wait 5.
+}
+
+print "ending program".
+
+
+
+
+

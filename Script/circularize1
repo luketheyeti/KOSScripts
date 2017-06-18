@@ -1,0 +1,29 @@
+///circularize script at apo
+
+parameter direction.
+
+
+///////////////
+run counttoapo(20).
+
+//set targetorb to (apoapsis * .95).
+set targetorb to (apoapsis - 5000).
+
+print "Apo is " + round(apoapsis).
+print "Target peri is " + round(targetorb).
+
+wait until eta:apoapsis < 15.
+lock steering to heading(direction,0).
+wait until eta:apoapsis < 5.
+print "burning in 5".
+wait 5.
+lock throttle to 1.  //change back to .6 for gentle burns.
+
+
+
+
+wait until periapsis >= targetorb.
+lock throttle to 0.
+
+
+run eccentricity.

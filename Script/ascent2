@@ -1,0 +1,184 @@
+parameter direction.
+parameter targetalt.
+
+
+
+
+clearscreen.
+print "running ascent 2.".
+wait 2.
+
+clearscreen.
+lock throttle to 1.
+lock steering to heading(0,90).
+
+run countfrom(5).
+
+clearscreen.
+
+print "====================".
+print "beginning ascent program".
+print "====================".
+
+stage.
+wait 3.
+
+lock steering to heading(0,90).
+wait 3.
+print "====================".
+print "starting roll program".
+print "====================".
+lock steering to heading ((direction/2),90).
+wait 1.
+lock steering to heading (direction,90).
+
+wait until ship:velocity:surface:mag >= 100.
+print "====================".
+print "Starting turn".
+print "====================".
+lock steering to heading (direction,85).
+wait 1.
+lock steering to heading (direction,80).
+lock throttle to .9.
+
+
+wait until ship:velocity:surface:mag >= 200.
+print "====================".
+print"pitching down".
+print "====================".
+lock steering to heading (direction,75).
+wait 1.
+lock steering to heading (direction,70).
+print "====================".
+print "throttling to .8".
+print "====================".
+lock throttle to .8.
+
+wait until ship:velocity:surface:mag >= 300.
+print"pitching down".
+print "====================".
+lock steering to heading (direction,60).
+
+
+wait until ship:velocity:surface:mag >= 500.
+print "pitching down".
+print "====================".
+lock steering to heading (direction,50).
+
+
+///////////
+
+until ship:altitude >= 10000{
+clearscreen.
+print "===================".
+print "waiting until altitude is over 10k".
+print "altitude is " + round(ship:altitude).
+print "===================".
+wait 1.
+}
+
+clearscreen.
+print "throttling back up".
+lock throttle to 1.
+
+//////////
+
+until ship:velocity:surface:mag >= 900 or stage:liquidfuel < 1{
+clearscreen.
+print "===================".
+print "ship velocity is " + round(ship:velocity:surface:mag).
+print "waiting until ship velocity >= 900".
+print "===================".
+wait 1.
+}
+
+clearscreen.
+print "pitching down".
+lock steering to heading (direction,40).
+
+until stage:liquidfuel < 1 or ship:apoapsis >=targetalt{
+clearscreen.
+print "===================".
+print "Fuel remaining: " + round(stage:liquidfuel).
+print "Ship apo: " + round(ship:apoapsis).
+print "Ship altitude: " + round(ship:altitude).
+print "===================".
+wait 1.
+}
+
+//////////////////////////////////
+clearscreen.
+lock throttle to 0.
+wait 3.
+print "===================".
+print "staging".
+print "===================".
+
+stage.
+wait 1.
+
+lock throttle to 1.
+print "===================".
+print "staging".
+print "===================".
+stage.
+wait 1.
+
+print "===================".
+print"pitching down".
+print "===================".
+lock steering to heading (direction,30).
+
+//////////
+until ship:apoapsis >= targetalt{
+clearscreen.
+print "===================".
+print "burning for space".
+print "===================".
+print "altitude is " + round(ship:altitude).
+print "apo is " + round(ship:apoapsis).
+print "===================".
+wait 1.
+}
+
+clearscreen.
+print "===================".
+print "apo reached, killing throttle".
+lock throttle to 0.
+print "coasting to apo".
+print "===================".
+
+wait until ship:altitude >= 50000.
+lock steering to prograde.
+wait 3.
+print "staging fairings".
+stage.
+
+///////////////////////////
+run counttoapo(35).
+
+declare FinalAlt to round(ship:apoapsis).
+
+print "Final altitude set to: " + FinalAlt.
+wait 3.
+
+
+lock steering to heading (direction, 0).
+print "firing engines in 5".
+run countfrom(5).
+print "firing engines for orbit".
+lock throttle to 1.
+
+wait until ship:altitude >= FinalAlt.
+print "apo reached, pitching up".
+lock steering to heading (direction,5).
+
+wait until ship:apoapsis >= (FinalAlt *1.01).
+print "woah there".
+lock steerint to headint (direction,0).
+
+wait until periapsis >= max(74000,(FinalAlt * .9)) .
+lock throttle to 0.
+
+set ship:control:pilotmainthrottle to 0.
+print "Welcome to orbit".
