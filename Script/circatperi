@@ -13,7 +13,7 @@ print "peri is" + periapsis.
 print "Target apoapsis is " + targetorb.
 
 wait until eta:periapsis < 15.
-lock steering to heading(Direction, PROGRADE).
+lock steering to heading(Direction, 180).
 wait until eta:periapsis < 5.
 print "burning in 5".
 wait 5.
