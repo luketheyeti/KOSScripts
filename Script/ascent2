@@ -1,7 +1,9 @@
+//size 2 launch script?
+//same as ascent 1b but maybe better
+
+
 parameter direction.
 parameter targetalt.
-
-
 
 
 clearscreen.
