@@ -140,7 +140,8 @@ until ship:altitude >= 71000{
 
 //circularize
 
-run CircAtApo(Direction).
+//run CircAtApo(Direction).- this was renamed
+run Circularize(Direction).
 
 //eccentricity
 run eccent.
