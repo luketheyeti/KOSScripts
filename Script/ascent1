@@ -1,5 +1,6 @@
 //basic launch script
 //expects fairings
+//attempts to circularize
 
 clearscreen.
 lock throttle to 1.
@@ -81,11 +82,9 @@ wait 1.
 wait until eta:apoapsis <30.
 lock steering to heading (90, 0).
 wait 10.
+//attempts to circularize
 print "firing engines for orbit".
 lock throttle to 1.
-
-//wait until periapsis > 60000.
-//lock throttle to .8.
 wait until periapsis > 72000.
 lock throttle to 0.
 
