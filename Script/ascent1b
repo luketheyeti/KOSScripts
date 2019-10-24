@@ -80,11 +80,13 @@ wait 3.
 print "staging fairings".
 stage.
 
+//dependency here
 run counttoapo(35).
 
 
 lock steering to heading (direction, 0).
 print "firing engines in 5".
+//dependency here
 run countfrom(5).
 print "firing engines for orbit".
 lock throttle to 1.
