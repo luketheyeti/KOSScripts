@@ -1,4 +1,6 @@
 //size 1 launch script.
+//expects fairings
+//circularizes with basic logic.....
 
 parameter direction.
 parameter targetalt.
@@ -88,11 +90,10 @@ lock steering to heading (direction, 0).
 print "firing engines in 5".
 //dependency here
 run countfrom(5).
+//attempts to circularize here
 print "firing engines for orbit".
 lock throttle to 1.
 
-//wait until (periapsis >= targetalt * .9)..
-//lock throttle to .8.
 wait until periapsis >= max(74000,(targetalt * .9)) .
 lock throttle to 0.
 
