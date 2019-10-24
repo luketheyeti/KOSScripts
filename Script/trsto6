@@ -1,0 +1,146 @@
+//orbito 2 based launch script.
+parameter Direction.
+parameter TargetAlt.
+
+clearscreen.
+lock throttle to 1.
+lock steering to heading (0,90).
+
+
+//countdown
+
+run countfrom(5).
+
+print "blastoff!!".
+stage.
+
+
+
+when ship:maxthrust = 0 then{
+ print "staging!".
+ stage.
+ wait 1.
+ preserve.
+}
+
+when ship:altitude >= 50000 then {
+ print "losing fairings".
+ stage.
+ wait 1.
+}
+
+//roll program
+wait until ship:velocity:surface:mag > 40.
+print "starting roll program".
+lock steering to heading((Direction / 2),90).
+wait (Direction/180).
+lock steering to heading(Direction,90).
+wait 1.
+lock steering to heading(Direction,90).
+
+wait until ship:velocity:surface:mag >= 90.
+
+///////////////////
+declare Pitch to 89.
+declare AscVel to 100.
+
+until Pitch <= 50{ 
+ until ship:velocity:surface:mag >= AscVel{
+  clearscreen.
+  print "Velocity: " + round(ship:velocity:surface:mag).
+  print "target velocity: " + AscVel.
+  print "altitude: " + round(ship:altitude).
+  print "pitch: " + Pitch.
+  wait .1.
+
+ }
+
+ //increment by  
+ lock steering to heading(Direction,Pitch).
+ set Pitch to (Pitch - 1).
+ Set AscVel to (AscVel + 7).
+ 
+}
+
+/////////////////////////
+set Pitch to (Pitch - 1).
+declare AscApo to 20000.
+
+until Pitch <= 10 or ship:apoapsis >= 60000{ 
+ until ship:apoapsis >= AscApo{
+  clearscreen.
+  print "apo: " + round(ship:apoapsis).
+  print "target apo: " + AscApo.
+  print "pitch: " + Pitch.
+  wait .1.
+  
+ }
+ 
+
+ lock steering to heading (Direction,Pitch).
+ set Pitch to (Pitch - 1).
+ set AscApo to (AscApo + 1000).
+
+}
+
+
+print "apo: " + round(ship:apoapsis).
+print "target apo: " + TargetAlt.
+wait 1.
+
+until ship:apoapsis >= 70000{ 
+ clearscreen.
+ print "apo: " + round(ship:apoapsis).
+ print "target apo: 70000".
+ wait .1.
+
+}
+
+clearscreen.
+print "apo in space".
+wait 1.
+
+////
+//wait until ship:apoapsis >= TargetAlt.
+until ship:apoapsis >= TargetAlt{ 
+ clearscreen.
+ print "apo: " + round(ship:apoapsis).
+ print "target apo: " + TargetAlt.
+ wait .1.
+
+}
+
+lock throttle to 0.
+lock steering to prograde.
+
+clearscreen.
+print "apo: " + round(ship:apoapsis).
+print "tApo: " + TargetAlt.
+print "apo at destination, throttle off".
+wait 1.
+
+print "final apo: " + round(ship:apoapsis).
+print "target alt: " + TargetAlt.
+wait 5.
+
+until ship:altitude >= 71000{
+ clearscreen.
+ print "alt: " + round(ship:altitude).
+ print "Talt: 71000".
+ wait .1.
+}
+
+//circularize
+
+run CircAtApo(Direction).
+
+//eccentricity
+run eccent.
+
+//separate
+
+print round(stage:liquidfuel).
+
+print "goodbye".
+
+

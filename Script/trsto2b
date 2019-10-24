@@ -1,0 +1,132 @@
+//Touristo2b launch script.
+parameter Direction.
+parameter TargetAlt.
+
+clearscreen.
+lock throttle to 1.
+lock steering to heading (0,90).
+
+
+//countdown
+
+run countfrom(10).
+
+print "blastoff!!".
+stage.
+
+
+when ship:velocity:surface:mag >= 90 then {
+ print "throttling down".
+ lock throttle to .9.
+ wait 1.
+}
+
+when ship:altitude >= 1000 then {
+ print "throttling down".
+ lock throttle to .8.
+ wait 1.
+}
+
+when ship:altitude >= 10000 then {
+ print "throttling up!".
+ lock throttle to 1.
+ wait 1.
+}
+
+
+wait until ship:velocity:surface:mag > 40.
+print "starting roll program".
+lock steering to heading((Direction / 2),90).
+wait (Direction/180).
+lock steering to heading(Direction,90).
+
+wait until ship:velocity:surface:mag >= 90.
+
+declare Pitch to 89.
+declare AscVel to 100.
+
+until Pitch <= 46{ 
+ until ship:velocity:surface:mag >= AscVel{
+  clearscreen.
+  print "Velocity: " + round(ship:velocity:surface:mag).
+  print "target velocity: " + AscVel.
+  print "pitch: " + Pitch.
+  wait .1.
+
+ }
+
+ //action
+ lock steering to heading(Direction,Pitch).
+ set Pitch to (Pitch - 1).
+ Set AscVel to (AscVel + 8).
+ 
+}
+
+
+set Pitch to (Pitch - 1).
+declare AscApo to 20000.
+
+until Pitch <= 10 or ship:apoapsis >= 60000{ 
+ until ship:apoapsis >= AscApo{
+  clearscreen.
+  print "apo: " + round(ship:apoapsis).
+  print "target apo: " + AscApo.
+  print "pitch: " + Pitch.
+  wait .1.
+  
+ }
+ 
+
+ lock steering to heading (Direction,Pitch).
+ 
+ set Pitch to (Pitch - 1).
+ set AscApo to (AscApo + 2000).
+
+}
+
+
+print "apo: " + round(ship:apoapsis).
+print "target apo: " + TargetAlt.
+wait 1.
+
+until ship:apoapsis >= 70000{ 
+ clearscreen.
+ print "apo: " + round(ship:apoapsis).
+ print "target apo: " + TargetAlt.
+ wait .1.
+
+}
+
+
+print "apo in space".
+wait 1.
+
+wait until ship:apoapsis >= TargetAlt.
+
+clearscreen.
+print "apo: " + ship:apoapsis.
+print "target apo: " + TargetAlt.
+print "apo at destination, throttle off".
+lock throttle to 0.
+wait 1.
+
+print "final apo: " + round(ship:apoapsis).
+print "target alt: " + TargetAlt.
+wait 5.
+
+until ship:altitude >= 70000{
+ clearscreen.
+ print "alt: " + ship:altitude.
+ print "Talt: " + TargetAlt.
+ wait .1.
+}
+
+//circularize
+
+run CircAtApo(Direction).
+
+//separate
+
+
+
+print "goodbye".
