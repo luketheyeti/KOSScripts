@@ -132,7 +132,7 @@ wait 1.
 
 //circularize
 
-run CircAtApo(Direction).
+run Circularize(Direction).
 
 //eccentricity
 
