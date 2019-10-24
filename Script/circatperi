@@ -1,5 +1,6 @@
 //script will circularize at periapsis.
-
+//doesnt use eccentricity script
+parameter Direction.
 
 
 until eta:periapsis < 20{
@@ -12,7 +13,7 @@ print "peri is" + periapsis.
 print "Target apoapsis is " + targetorb.
 
 wait until eta:periapsis < 15.
-lock steering to heading(90,180).
+lock steering to heading(Direction, PROGRADE).
 wait until eta:periapsis < 5.
 print "burning in 5".
 wait 5.
