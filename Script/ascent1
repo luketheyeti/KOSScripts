@@ -1,4 +1,5 @@
 //basic launch script
+//expects fairings
 
 clearscreen.
 lock throttle to 1.
