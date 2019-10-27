@@ -1,4 +1,13 @@
 //Touristo2b launch script.
+//has basic throttle control.
+//has semi-advanced roll control
+//has semi-advancd gracity turn, velocity then apoapsis based.
+//goes to 46 at 8m/s per step
+//need to know how fast they're going when they do the thing
+//most of this can become functions!
+
+
+
 parameter Direction.
 parameter TargetAlt.
 
@@ -9,11 +18,9 @@ lock steering to heading (0,90).
 
 //countdown
 
-run countfrom(10).
-
+run countfrom(5).
 print "blastoff!!".
 stage.
-
 
 when ship:velocity:surface:mag >= 90 then {
  print "throttling down".
@@ -33,7 +40,7 @@ when ship:altitude >= 10000 then {
  wait 1.
 }
 
-
+//roll program
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
 lock steering to heading((Direction / 2),90).
@@ -42,6 +49,8 @@ lock steering to heading(Direction,90).
 
 wait until ship:velocity:surface:mag >= 90.
 
+
+//ascent 1
 declare Pitch to 89.
 declare AscVel to 100.
 
@@ -62,7 +71,7 @@ until Pitch <= 46{
  
 }
 
-
+//ascent2
 set Pitch to (Pitch - 1).
 declare AscApo to 20000.
 
@@ -76,9 +85,7 @@ until Pitch <= 10 or ship:apoapsis >= 60000{
   
  }
  
-
  lock steering to heading (Direction,Pitch).
- 
  set Pitch to (Pitch - 1).
  set AscApo to (AscApo + 2000).
 
@@ -96,7 +103,6 @@ until ship:apoapsis >= 70000{
  wait .1.
 
 }
-
 
 print "apo in space".
 wait 1.
@@ -123,10 +129,9 @@ until ship:altitude >= 70000{
 
 //circularize
 
-run CircAtApo(Direction).
+run Circularize(Direction).
 
 //separate
-
 
 
 print "goodbye".
