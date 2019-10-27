@@ -1,5 +1,7 @@
 //orbito 2 based launch script.
 //can be used on most single stack, tsto rockets without a fairing.
+//uses semi-advanced gravity turn - velocity based for the first half of the gravity turn then alt/apo based
+//this means you focus on speed for the first part of the launch, working through the thick atmo, then you focus on altitude
 
 parameter Direction.
 parameter TargetAlt.
@@ -10,9 +12,7 @@ lock steering to heading (0,90).
 
 
 //countdown
-
 run countfrom(5).
-
 print "blastoff!!".
 stage.
 
@@ -34,7 +34,6 @@ when ship:maxthrust = 0 then{
 
 
 //Roll Program
-
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
 lock steering to heading((Direction / 2),90).
@@ -48,8 +47,9 @@ wait until ship:velocity:surface:mag >= 90.
 
 //Ascent 1
 //runs until pitch is 50
-//turns 1 degree for every +7 m/s starting at 100 m/s and ending around 350 m/s
+//turns 1 degree for every +7 m/s starting at 100 m/s and ending around 300 m/s
 print "starting gravity turn".
+wait 1.
 declare Pitch to 89.
 declare AscVel to 100.
 
@@ -62,8 +62,6 @@ until Pitch <= 50{
   print "altitude: " + round(ship:altitude).
   print "apo: " + round(ship:apoapsis).
   wait .1.
-
-
  }
 
  //increment by  
@@ -73,7 +71,14 @@ until Pitch <= 50{
  
 }
 
+//velocity at end of ascent1:
+print "Velocity: " + round(ship:velocity:surface:mag).
+print "altitude: " + round(ship:altitude).
+wait 1.
+
 //Ascent 2
+//runs until your pitch is 10 or your apo is above 60k
+//pitches over 1deg for every 1k increase in apospsis.
 print "continuing gravity turn".
 set Pitch to (Pitch - 1).
 declare AscApo to 20000.
