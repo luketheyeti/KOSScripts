@@ -12,9 +12,7 @@ lock steering to heading (0,90).
 
 
 //countdown
-
 run countfrom(5).
-
 print "blastoff!!".
 stage.
 
