@@ -18,8 +18,8 @@ run countfrom(5).
 print "blastoff!!".
 stage.
 
+//stager
 declare maxThrust to ship:maxthrust.
-
 when ship:maxthrust < maxThrust then {
  print "staging!".
  stage.
