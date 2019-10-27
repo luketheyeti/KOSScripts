@@ -2,7 +2,7 @@
 //can be used on most single stack, tsto rockets.
 //No Fairing!
 //uses semi-advanced roll program.
-//uses semi-advanced gravity turn.
+//uses semi-advanced gravity turn, velocity then apo based
 parameter Direction.
 parameter TargetAlt.
 
