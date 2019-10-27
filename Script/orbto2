@@ -1,5 +1,6 @@
 //orbito 2 launch script.
 //can be used on most single stack, tsto rockets.
+//uses semi-advanced gravity turn.
 parameter Direction.
 parameter TargetAlt.
 
@@ -129,6 +130,8 @@ until ship:altitude >= 71000{
  print "Talt: 71000".
  wait .1.
 }
+
+print "welcome to space?".
 
 //circularize
 
