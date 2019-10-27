@@ -41,6 +41,9 @@ lock steering to heading(Direction,90).
 wait until ship:velocity:surface:mag >= 90.
 
 ///////////////////
+//Ascent 1
+//runs until pitch is 50
+//turns 1 degree for every +7 m/s starting at 100 m/s and ending around 300 m/s
 declare Pitch to 89.
 declare AscVel to 100.
 
@@ -64,6 +67,9 @@ until Pitch <= 50{
 }
 
 /////////////////////////
+//Ascent 2
+//runs until your pitch is 10 or your apo is above 60k
+//pitches over 1deg for every 1k increase in apospsis.
 set Pitch to (Pitch - 1).
 declare AscApo to 20000.
 
@@ -84,6 +90,7 @@ until Pitch <= 10 or ship:apoapsis >= 60000{
 
 }
 
+//wait for space
 
 print "apo: " + round(ship:apoapsis).
 print "target apo: " + TargetAlt.
@@ -126,6 +133,7 @@ wait 5.
 
 until ship:altitude >= 71000{
  clearscreen.
+ print "waiting to clear atmosphere".
  print "alt: " + round(ship:altitude).
  print "Talt: 71000".
  wait .1.
