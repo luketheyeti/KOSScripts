@@ -1,6 +1,7 @@
 //orbito 2 launch script.
 //can be used on most single stack, tsto rockets.
 //No Fairing!
+//uses semi-advanced roll program.
 //uses semi-advanced gravity turn.
 parameter Direction.
 parameter TargetAlt.
