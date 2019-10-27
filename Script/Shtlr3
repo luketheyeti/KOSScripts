@@ -1,6 +1,8 @@
 //orbito 2 based launch script.
 //Shuttler 3 was replaced by orbito 5 and shuttler 3, shuttler 5 is a space only ship. 
+//expects fairings
 //If anything this should become the script for aspargus launchers with fairings.
+//advanced staging logic i don't think it needs
 
 
 parameter Direction.
@@ -138,7 +140,7 @@ until ship:altitude >= 71000{
 
 //circularize
 
-run CircAtApo(Direction).
+run Circularize(Direction).
 
 //eccentricity
 
