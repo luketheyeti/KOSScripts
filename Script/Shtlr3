@@ -2,7 +2,8 @@
 //Shuttler 3 was replaced by orbito 5 and shuttler 3, shuttler 5 is a space only ship. 
 //expects fairings
 //If anything this should become the script for aspargus launchers with fairings.
-//advanced staging logic i don't think it needs
+//semi-advanced gravity turn, vel/apo
+//advanced staging logic for side boosters
 
 
 parameter Direction.
