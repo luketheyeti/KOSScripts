@@ -1,0 +1,19 @@
+
+parameter buffer.
+
+//////////////////////////
+
+
+print buffer + " second buffer".
+wait 5.
+
+until eta:periapsis <= buffer{
+
+clearscreen.
+print "time to peri:" + round(eta:periapsis).
+wait 5.
+print "time to peri:" + round(eta:periapsis).
+wait 1.
+
+}
+

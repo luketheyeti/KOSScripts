@@ -1,0 +1,21 @@
+
+parameter buffer.
+
+
+print buffer + " second buffer".
+wait 5.
+until eta:apoapsis <= buffer{
+
+clearscreen.
+print "==================".
+print "time to apo:" + round(eta:apoapsis).
+print "==================".
+print "apo is " +round(apoapsis).
+print "==================".
+print "altitude is " + round(ship:altitude).
+print "==================".
+wait 1.
+
+}
+
+

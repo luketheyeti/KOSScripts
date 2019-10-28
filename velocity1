@@ -1,0 +1,53 @@
+function Vel_Diff{
+
+    parameter TargAlt.
+
+    set TargOrbVel to round(600000 * sqrt((9.80665)/(600000 + TargAlt))).
+    set CurOrbVel to round(ship:velocity:orbit:mag).
+
+
+    print TargOrbVel.
+    print CurOrbVel.
+
+    set VelDiff to TargOrbVel - CurOrbVel.
+
+    print VelDiff.
+}
+
+function Burn_Time{
+    Parameter DeltaV.
+
+list engines in MyEng.
+for eng in MyEng {
+//    print eng:ISP.
+    set EISP to eng:isp.
+}
+
+
+
+set E to constant():E.
+set G to 9.08665.
+set I to EISP * G.
+set M to round(ship:mass * 10).
+set T to round(ship:maxthrust).
+set F to MyThrust/EISP.
+
+//print E.
+//print G.
+//print EISP.
+//print MyMass.
+//print MyThrust.
+//print FuelFlow.
+
+print "++++".
+print round((M / F)* (1-E^(-DeltaV/I)),1) + "s".
+
+}
+
+burn_time(496).
+
+
+
+
+
+

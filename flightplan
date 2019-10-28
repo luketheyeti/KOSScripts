@@ -1,0 +1,9 @@
+run ascent2(90,85000).
+print "Separating launch vehicle for deorbit in 5".
+wait 4.
+
+stage.
+
+wait 5.
+
+run deorbit1.
