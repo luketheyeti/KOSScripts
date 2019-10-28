@@ -24,13 +24,6 @@ when ship:maxthrust = 0 then{
  preserve.
 }
 
-//activate abort system here. this could be a parameter i guess.
-//when ship:altitude >= 30000 then {
-// print "losing safety system".
-// stage.
-// wait 1.
-//}
-
 //Roll Program
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
