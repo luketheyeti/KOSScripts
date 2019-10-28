@@ -1,5 +1,8 @@
-//orbito 2 based launch script.
-//2 stage and a fairing launch script.
+//2 stage single stick and a fairing launch script.
+//semi advanced roll control
+//semi advanced gravity turn, vel/apo based
+//uses circ
+
 parameter Direction.
 parameter TargetAlt.
 
@@ -105,7 +108,9 @@ until ship:apoapsis >= TargetAlt{
  wait .1.
 }
 
+/////
 lock throttle to 0.
+/////
 lock steering to prograde.
 clearscreen.
 print "apo at destination, throttle off".
@@ -136,7 +141,7 @@ run Circularize(Direction).
 
 //eccentricity
 
-run eccent.
+run eccentricity.
 
 //ship stats
 
