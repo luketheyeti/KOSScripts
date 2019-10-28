@@ -1,4 +1,5 @@
 //single stack, tsto rockets without a fairing.
+//no throttle control
 //uses semi advanced roll program.
 //uses semi-advanced gravity turn - vel/apo based
 
@@ -69,6 +70,7 @@ until Pitch <= 50{
 }
 
 //velocity at end of ascent1:
+//turn this into logging
 print "Velocity: " + round(ship:velocity:surface:mag).
 print "altitude: " + round(ship:altitude).
 wait 1.
@@ -143,8 +145,6 @@ until ship:altitude >= 71000{
 }
 
 //circularize
-
-//run CircAtApo(Direction).- this was renamed
 run Circularize(Direction).
 
 //eccentricity
