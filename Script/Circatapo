@@ -19,11 +19,7 @@ print "burning in 5".
 wait 5.
 lock throttle to 1.  //change back to .6 for gentle burns.
 
-
-
-
 wait until periapsis >= targetorb.
 lock throttle to 0.
-
 
 run eccentricity.
