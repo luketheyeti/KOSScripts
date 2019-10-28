@@ -1,9 +1,9 @@
-//orbito 2 based launch script.
-//Shuttler 3 was replaced by orbito 5 and shuttler 3, shuttler 5 is a space only ship. 
-//expects fairings
-//If anything this should become the script for aspargus launchers with fairings.
+//3stage sideboosters and fairing
+//semi-advanced roll program
 //semi-advanced gravity turn, vel/apo
+//no throttle control
 //advanced staging logic for side boosters
+//also for shtlr 5, should be renamed 3stoF
 
 
 parameter Direction.
