@@ -1,12 +1,15 @@
-//orbito 2 based launch script.
-//Shuttler 3 was replaced by orbito 5 and shuttler 3, shuttler 5 is a space only ship. 
-//expects fairings
-//If anything this should become the script for aspargus launchers with fairings.
-//advanced staging logic i don't think it needs
+//3stage sideboosters and fairing
+//semi-advanced roll program
+//semi-advanced gravity turn, vel/apo
+//no throttle control
+//advanced staging logic for side boosters
+//also for shtlr 5, should be renamed 3stoF
+//has fairings parameter, >0 to stage fairings.
 
 
 parameter Direction.
 parameter TargetAlt.
+parameter Fairings.
 
 clearscreen.
 lock throttle to 1.
@@ -24,7 +27,8 @@ declare maxThrust to ship:maxthrust.
 //declare shipStage to 1.
 
 when ship:maxthrust < maxThrust then {
- print "staging!".
+ print "staging boosters!".
+ wait 1.
  stage.
  wait 1.
  print ship:maxthrust.
@@ -33,18 +37,23 @@ when ship:maxthrust < maxThrust then {
 
 }
 
-when ship:maxthrust = 0 then{
- print "staging!".
+//when ship:maxthrust = 0 then{
+when ship:maxthrust < 1 then {
+ print "staging core!".
+ wait 1.
  stage.
  wait 1.
  preserve.
 }
 
-when ship:altitude >= 40000 then {
- print "losing fairings".
- stage.
- wait 1.
+if Fairings > 0{
+ when ship:altitude >= 40000 then {
+  print "losing fairings".
+  stage.
+  wait 1.
+ }
 }
+
 
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
@@ -144,6 +153,7 @@ run Circularize(Direction).
 
 //eccentricity
 
+run eccentricity.
 
 //separate
 

@@ -1,8 +1,7 @@
-//orbito 2 based launch script.
-//can be used on most single stack, tsto rockets without a fairing.
+//single stack, tsto rockets without a fairing.
+//no throttle control
 //uses semi advanced roll program.
-//uses semi-advanced gravity turn - velocity based for the first half of the gravity turn then alt/apo based
-//this means you focus on speed for the first part of the launch, working through the thick atmo, then you focus on altitude
+//uses semi-advanced gravity turn - vel/apo based
 
 parameter Direction.
 parameter TargetAlt.
@@ -24,13 +23,6 @@ when ship:maxthrust = 0 then{
  wait 1.
  preserve.
 }
-
-//activate abort system here. this could be a parameter i guess.
-//when ship:altitude >= 30000 then {
-// print "losing safety system".
-// stage.
-// wait 1.
-//}
 
 //Roll Program
 wait until ship:velocity:surface:mag > 40.
@@ -71,6 +63,7 @@ until Pitch <= 50{
 }
 
 //velocity at end of ascent1:
+//turn this into logging
 print "Velocity: " + round(ship:velocity:surface:mag).
 print "altitude: " + round(ship:altitude).
 wait 1.
@@ -145,12 +138,10 @@ until ship:altitude >= 71000{
 }
 
 //circularize
-
-//run CircAtApo(Direction).- this was renamed
 run Circularize(Direction).
 
 //eccentricity
-run eccent.
+run eccentricity.
 
 //make ship state scrip tthat lists fuel, batt, etc.
 //run shipstats.

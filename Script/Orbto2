@@ -3,6 +3,7 @@
 //No Fairing!
 //uses semi-advanced roll program.
 //uses semi-advanced gravity turn, velocity then apo based
+//expects a safety system!
 parameter Direction.
 parameter TargetAlt.
 
@@ -146,7 +147,7 @@ print "welcome to space?".
 run Circularize(Direction).
 
 //eccentricity
-run eccent.
+run eccentricity.
 
 //make ship state scrip tthat lists fuel, batt, etc.
 //run shipstats.
