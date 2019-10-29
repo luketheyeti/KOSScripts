@@ -147,7 +147,7 @@ print "welcome to space?".
 run Circularize(Direction).
 
 //eccentricity
-run eccent.
+run eccentricity.
 
 //make ship state scrip tthat lists fuel, batt, etc.
 //run shipstats.
