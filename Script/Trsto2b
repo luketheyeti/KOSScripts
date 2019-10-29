@@ -131,7 +131,7 @@ until ship:altitude >= 70000{
 
 run Circularize(Direction).
 
-//separate
-
+//eccentricity.
+run eccentricity.
 
 print "goodbye".
