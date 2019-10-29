@@ -4,10 +4,12 @@
 //no throttle control
 //advanced staging logic for side boosters
 //also for shtlr 5, should be renamed 3stoF
+//has fairings parameter, >0 to stage fairings.
 
 
 parameter Direction.
 parameter TargetAlt.
+parameter Fairings.
 
 clearscreen.
 lock throttle to 1.
@@ -35,7 +37,8 @@ when ship:maxthrust < maxThrust then {
 
 }
 
-when ship:maxthrust = 0 then{
+//when ship:maxthrust = 0 then{
+when ship:maxthrust < 1 then {
  print "staging core!".
  wait 1.
  stage.
@@ -43,11 +46,14 @@ when ship:maxthrust = 0 then{
  preserve.
 }
 
-when ship:altitude >= 40000 then {
- print "losing fairings".
- stage.
- wait 1.
+if Fairings > 0{
+ when ship:altitude >= 40000 then {
+  print "losing fairings".
+  stage.
+  wait 1.
+ }
 }
+
 
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
