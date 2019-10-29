@@ -25,7 +25,8 @@ declare maxThrust to ship:maxthrust.
 //declare shipStage to 1.
 
 when ship:maxthrust < maxThrust then {
- print "staging!".
+ print "staging boosters!".
+ wait 1.
  stage.
  wait 1.
  print ship:maxthrust.
@@ -35,7 +36,8 @@ when ship:maxthrust < maxThrust then {
 }
 
 when ship:maxthrust = 0 then{
- print "staging!".
+ print "staging core!".
+ wait 1.
  stage.
  wait 1.
  preserve.
