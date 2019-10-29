@@ -3,7 +3,6 @@
 //semi-advanced gravity turn, vel/apo
 //no throttle control
 //advanced staging logic for side boosters
-//also for shtlr 5, should be renamed 3stoF
 //has fairings parameter, >0 to stage fairings.
 
 
