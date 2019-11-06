@@ -4,6 +4,8 @@
 //no throttle control
 //advanced staging logic for side boosters
 //has fairings parameter, >0 to stage fairings.
+//needs throttle control
+//needs minimum target alt
 
 
 parameter Direction.
@@ -46,7 +48,7 @@ when ship:maxthrust < 1 then {
 }
 
 if Fairings > 0{
- when ship:altitude >= 40000 then {
+ when ship:altitude >= 45000 then {
   print "losing fairings".
   stage.
   wait 1.

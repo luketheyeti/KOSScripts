@@ -44,6 +44,13 @@ wait 3.
 until eta:apoapsis <= BurnTime{
  clearscreen.
  print "time until apo: " + round(eta:apoapsis).
+ print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
+ print "Burn Time (s): " + round(BurnTime).
+ print "apo: " + round(apoapsis).
+ print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
+ print "DeltaA: " + round(DeltaA).
+ print "Velocity at apo: " + round(ApoVelocity).
+ print "DV: " + round(DeltaV).
  print "Burn Time (s): " + round(BurnTime).
  wait .1.
 }
@@ -54,6 +61,13 @@ print "waiting until burn: " + round(eta:apoapsis - (BurnTime/2)).
 until eta:apoapsis <= (BurnTime / 2) + 3{
  clearscreen.
  print "time until apo: " + round(eta:apoapsis).
+ print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
+ print "Burn Time (s): " + round(BurnTime).
+ print "apo: " + round(apoapsis).
+ print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
+ print "DeltaA: " + round(DeltaA).
+ print "Velocity at apo: " + round(ApoVelocity).
+ print "DV: " + round(DeltaV).
  print "Burn Time (s): " + round(BurnTime).
  wait .1.
 }
@@ -67,7 +81,7 @@ print "burning".
 //print "apo: " + round(ship:apoapsis).
 //wait until periapsis >= (TargetOrb * .95).
 
-until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and periapsis >= max(72000,(TargetOrb * .99))){
+until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and periapsis >= max(80000,(TargetOrb * .95))){
  //wait until periapsis >= 72000.
  //wait BurnTime.
  //lock throttle to 0.

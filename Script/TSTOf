@@ -3,6 +3,7 @@
 //no throttle control
 //semi advanced gravity turn, vel/apo based
 //uses circ
+//needs minimum targetalt
 
 parameter Direction.
 parameter TargetAlt.
@@ -22,12 +23,12 @@ stage.
 
 when ship:maxthrust < 1 then {
  print "staging!".
- stage.
  wait 1.
+ stage.
  preserve.
 }
 
-when ship:altitude >= 50000 then {
+when ship:altitude >= 45000 then {
  print "losing fairings".
  stage.
  wait 1.
@@ -48,7 +49,7 @@ wait until ship:velocity:surface:mag >= 90.
 declare Pitch to 89.
 declare AscVel to 100.
 
-until Pitch <= 50{ 
+until Pitch <= 45{ 
  until ship:velocity:surface:mag >= AscVel{
   clearscreen.
   print "Velocity: " + round(ship:velocity:surface:mag).
@@ -79,12 +80,12 @@ until Pitch <= 10 or ship:apoapsis >= 60000{
   print "altitude: " + round(ship:altitude).
   print "pitch: " + Pitch.
   wait .1.
-  
  }
 
  lock steering to heading (Direction,Pitch).
  set Pitch to (Pitch - 1).
  set AscApo to (AscApo + 1000).
+ //set AscApo to (AscApo + 700).
 
 }
 
@@ -117,9 +118,8 @@ lock steering to prograde.
 clearscreen.
 print "apo at destination, throttle off".
 wait 1.
-print "-".
-wait 1.
 print "final apo: " + round(ship:apoapsis).
+wait 1.
 print "target alt: " + TargetAlt.
 wait 5.
 
@@ -139,11 +139,9 @@ wait 1.
 
 
 //circularize
-
 run Circularize(Direction).
 
 //eccentricity
-
 run eccentricity.
 
 //ship stats
