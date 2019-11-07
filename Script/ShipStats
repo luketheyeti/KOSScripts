@@ -12,5 +12,7 @@ print "==============".
 print "your eccentricity is".
 print round((periapsis/apoapsis),4).
 print "==============".
+print "fuel remaining:".
+print round(stage:liquidfuel).
 
 
