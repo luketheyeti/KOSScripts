@@ -3,7 +3,7 @@ print "==============".
 print "your periapsis is".
 print round(periapsis,2).
 print "==============".
-print "your apoapsis is==".
+print "your apoapsis is".
 print round(apoapsis,2).
 print "==============".
 print "your eccentricity is".

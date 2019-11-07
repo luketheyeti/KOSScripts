@@ -1,11 +1,15 @@
-//orbito 2 launch script.
-//can be used on most single stack, tsto rockets.
-//No Fairing!
-//uses semi-advanced roll program.
-//uses semi-advanced gravity turn, velocity then apo based
-//expects a safety system!
+//2 stage single stick and a fairing launch script.
+//now with optional fairings! if > 0 then fairings!
+//semi advanced roll control
+//no throttle control
+//semi advanced gravity turn, vel/apo based
+//uses circ
+//needs minimum targetalt
+//needs to set pitch to 0
+
 parameter Direction.
 parameter TargetAlt.
+parameter Fairings.
 
 clearscreen.
 lock throttle to 1.
@@ -13,24 +17,30 @@ lock steering to heading (0,90).
 
 
 //countdown
+
 run countfrom(5).
+
 print "blastoff!!".
 stage.
 
-//stager
-declare maxThrust to ship:maxthrust.
-when ship:maxthrust < maxThrust then {
+//autostager
+when ship:maxthrust < 1 then {
  print "staging!".
- stage.
  wait 1.
+ stage.
+ preserve.
 }
 
-//when ship:altitude >= 30000 then {
-// print "losing safety system".
-// stage.
-// wait 1.
-//}
+//fairings!!!
+if Fairings > 0{
+ when ship:altitude >= 45000 then {
+  print "losing fairings".
+  stage.
+  wait 1.
+ }
+}
 
+//Roll Program
 wait until ship:velocity:surface:mag > 40.
 print "starting roll program".
 lock steering to heading((Direction / 2),90).
@@ -41,20 +51,16 @@ lock steering to heading(Direction,90).
 
 wait until ship:velocity:surface:mag >= 90.
 
-///////////////////
 //Ascent 1
-//runs until pitch is 50
-//turns 1 degree for every +7 m/s starting at 100 m/s and ending around 300 m/s
 declare Pitch to 89.
 declare AscVel to 100.
 
-until Pitch <= 50{ 
+until Pitch <= 45{ 
  until ship:velocity:surface:mag >= AscVel{
   clearscreen.
   print "Velocity: " + round(ship:velocity:surface:mag).
   print "target velocity: " + AscVel.
   print "altitude: " + round(ship:altitude).
-  print "apo: " + round(ship:apoapsis).
   print "pitch: " + Pitch.
   wait .1.
 
@@ -67,91 +73,88 @@ until Pitch <= 50{
  
 }
 
-/////////////////////////
+//////////
 //Ascent 2
-//runs until your pitch is 10 or your apo is above 60k
-//pitches over 1deg for every 1k increase in apospsis.
 set Pitch to (Pitch - 1).
+//make this max 15000 or apo plus something.
 declare AscApo to 20000.
+
 
 until Pitch <= 10 or ship:apoapsis >= 60000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
   print "apo: " + round(ship:apoapsis).
   print "target apo: " + AscApo.
+  print "altitude: " + round(ship:altitude).
   print "pitch: " + Pitch.
   wait .1.
-  
  }
- 
 
  lock steering to heading (Direction,Pitch).
  set Pitch to (Pitch - 1).
  set AscApo to (AscApo + 1000).
+ //set AscApo to (AscApo + 700).
 
 }
 
-//wait for space
-
-print "apo: " + round(ship:apoapsis).
-print "target apo: " + TargetAlt.
-wait 1.
-
+//apo out of atmo
 until ship:apoapsis >= 70000{ 
  clearscreen.
  print "apo: " + round(ship:apoapsis).
- print "target apo: 70000".
+ print "altitude: " + round(ship:altitude).
+ print "target apo: " + TargetAlt.
+ print "pitch: " + Pitch.
+
  wait .1.
 
 }
 
-clearscreen.
-print "apo in space".
-wait 1.
-
-////
+////////////
+//Final Burn
 //wait until ship:apoapsis >= TargetAlt.
 until ship:apoapsis >= TargetAlt{
  clearscreen.
  print "apo: " + round(ship:apoapsis).
- print "target apo: 70000".
+ print "tApo: " + TargetAlt.
  wait .1.
-
 }
 
+/////
 lock throttle to 0.
+/////
 lock steering to prograde.
-
 clearscreen.
-print "apo: " + round(ship:apoapsis).
-print "tApo: " + TargetAlt.
 print "apo at destination, throttle off".
 wait 1.
-
 print "final apo: " + round(ship:apoapsis).
+wait 1.
 print "target alt: " + TargetAlt.
 wait 5.
 
+
+//Clear Atmo
 until ship:altitude >= 71000{
  clearscreen.
- print "waiting to clear atmosphere".
+ print "waiting to clear atmo".
  print "alt: " + round(ship:altitude).
  print "Talt: 71000".
  wait .1.
 }
 
-print "welcome to space?".
+clearscreen.
+print "welcome to space!".
+wait 1.
+
 
 //circularize
-
 run Circularize(Direction).
 
 //eccentricity
 run eccentricity.
 
-//make ship state scrip tthat lists fuel, batt, etc.
-//run shipstats.
-print "Fuel Remaining: " + round(stage:liquidfuel).
+//ship stats
+
+print round(stage:liquidfuel).
 
 print "goodbye".
 
