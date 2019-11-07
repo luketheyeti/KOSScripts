@@ -89,7 +89,7 @@ until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and peria
  print "apo: " + round(ship:apoapsis).
  print "tapo: " + TargetOrb.
  print "peri: " + round(ship:periapsis).
- print "tperi: " + (TargetOrb * .99).
+ print "tperi: " + round(TargetOrb * .99).
  wait .1.
 }
 

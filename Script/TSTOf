@@ -1,12 +1,15 @@
 //2 stage single stick and a fairing launch script.
+//now with optional fairings! if > 0 then fairings!
 //semi advanced roll control
 //no throttle control
 //semi advanced gravity turn, vel/apo based
 //uses circ
 //needs minimum targetalt
+//needs to set pitch to 0
 
 parameter Direction.
 parameter TargetAlt.
+parameter Fairings.
 
 clearscreen.
 lock throttle to 1.
@@ -20,7 +23,7 @@ run countfrom(5).
 print "blastoff!!".
 stage.
 
-
+//autostager
 when ship:maxthrust < 1 then {
  print "staging!".
  wait 1.
@@ -28,10 +31,13 @@ when ship:maxthrust < 1 then {
  preserve.
 }
 
-when ship:altitude >= 45000 then {
- print "losing fairings".
- stage.
- wait 1.
+//fairings!!!
+if Fairings > 0{
+ when ship:altitude >= 45000 then {
+  print "losing fairings".
+  stage.
+  wait 1.
+ }
 }
 
 //Roll Program
@@ -70,7 +76,9 @@ until Pitch <= 45{
 //////////
 //Ascent 2
 set Pitch to (Pitch - 1).
+//make this max 15000 or apo plus something.
 declare AscApo to 20000.
+
 
 until Pitch <= 10 or ship:apoapsis >= 60000{ 
  until ship:apoapsis >= AscApo{

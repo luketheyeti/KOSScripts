@@ -2,6 +2,7 @@
 //no throttle control
 //uses semi advanced roll program.
 //uses semi-advanced gravity turn - vel/apo based
+//depreciate now that tstof has fairings param
 
 parameter Direction.
 parameter TargetAlt.

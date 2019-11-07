@@ -6,6 +6,7 @@
 //has fairings parameter, >0 to stage fairings.
 //needs throttle control
 //needs minimum target alt
+//needs to set pitch to 0
 
 
 parameter Direction.
@@ -21,7 +22,7 @@ lock steering to heading (0,90).
 
 run countfrom(5).
 
-print "blastoff!!".
+print "Blastoff!!".
 stage.
 
 declare maxThrust to ship:maxthrust.
@@ -67,6 +68,7 @@ lock steering to heading(Direction,90).
 wait until ship:velocity:surface:mag >= 90.
 
 ///////////////////
+//ascent 1
 declare Pitch to 89.
 declare AscVel to 100.
 
@@ -89,8 +91,13 @@ until Pitch <= 50{
 }
 
 /////////////////////////
+//ascent 2
 set Pitch to (Pitch - 1).
-declare AscApo to 20000.
+//declare AscApo to 20000.
+//reactive first apo
+//might turn too soon lol
+//20000 is a bit of a wait tho, might be better to be 15000 or reactive. make a different gate.
+declare AscApo to (ship:apoapsis + 1000).
 
 until Pitch <= 10 or ship:apoapsis >= 60000{ 
  until ship:apoapsis >= AscApo{
