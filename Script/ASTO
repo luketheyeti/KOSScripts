@@ -5,13 +5,15 @@
 //advanced staging logic for side boosters
 //has fairings parameter, >0 to stage fairings.
 //needs throttle control
-//needs minimum target alt
-//needs to set pitch to 0
+//Has? minimum target alt
+//Has? to set pitch to 0
 
 
 parameter Direction.
 parameter TargetAlt.
 parameter Fairings.
+
+Set TargetAlt to Max(85000,TargetAlt).
 
 clearscreen.
 lock throttle to 1.
@@ -75,10 +77,10 @@ declare AscVel to 100.
 until Pitch <= 50{ 
  until ship:velocity:surface:mag >= AscVel{
   clearscreen.
-  print "Velocity: " + round(ship:velocity:surface:mag).
-  print "target velocity: " + AscVel.
-  print "altitude: " + round(ship:altitude).
-  print "pitch: " + Pitch.
+  print "       Velocity: " + round(ship:velocity:surface:mag).
+  print "Target Velocity: " + AscVel.
+  print "       Altitude: " + round(ship:altitude).
+  print "          Pitch: " + Pitch.
   wait .1.
 
  }
@@ -121,11 +123,23 @@ print "apo: " + round(ship:apoapsis).
 print "target apo: " + TargetAlt.
 wait 1.
 
-until ship:apoapsis >= 70000{ 
- clearscreen.
- print "apo: " + round(ship:apoapsis).
- print "target apo: 70000".
- wait .1.
+/////
+//Ascent 3
+/////
+until Pitch <= 3 or ship:apoapsis >= 72000{ 
+ until ship:apoapsis >= AscApo{
+  clearscreen.
+  print "apo: " + round(ship:apoapsis).
+  print "target apo: " + round(AscApo).
+  print "altitude: " + round(ship:altitude).
+  print "pitch: " + Pitch.
+  wait .1.
+ }
+
+ lock steering to heading (Direction,Pitch).
+ set Pitch to (Pitch - 1).
+ //if and above set Pitch to Max(0,(Pitch - 1)).
+ set AscApo to (AscApo + 1000).
 
 }
 
@@ -134,7 +148,15 @@ print "apo in space".
 wait 1.
 
 ////
-wait until ship:apoapsis >= TargetAlt.
+//Final Burn
+////
+//wait until ship:apoapsis >= TargetAlt.
+until ship:apoapsis >= TargetAlt{
+ clearscreen.
+ print "apo: " + round(ship:apoapsis).
+ print "tApo: " + TargetAlt.
+ wait .1.
+}
 lock throttle to 0.
 lock steering to prograde.
 
@@ -148,8 +170,10 @@ print "final apo: " + round(ship:apoapsis).
 print "target alt: " + TargetAlt.
 wait 5.
 
+//Clear Atmo
 until ship:altitude >= 71000{
  clearscreen.
+ print "waiting to clear atmo".
  print "alt: " + round(ship:altitude).
  print "Talt: 71000".
  wait .1.
@@ -165,7 +189,7 @@ run eccentricity.
 
 //separate
 
-print round(stage:liquidfuel).
+print round(ship:liquidfuel).
 
 print "goodbye".
 

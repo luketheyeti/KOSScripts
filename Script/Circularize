@@ -57,24 +57,24 @@ until eta:apoapsis <= BurnTime{
 
 
 print "waiting until burn: " + round(eta:apoapsis - (BurnTime/2)).
-//wait until eta:apoapsis <= (BurnTime / 2) + 3.
-until eta:apoapsis <= (BurnTime / 2) + 3{
+//wait until eta:apoapsis <= (BurnTime / 2) + 10.
+until eta:apoapsis <= (BurnTime / 2) + 10{
  clearscreen.
  print "time until apo: " + round(eta:apoapsis).
  print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
  print "Burn Time (s): " + round(BurnTime).
+ print "DV: " + round(DeltaV).
  print "apo: " + round(apoapsis).
  print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
  print "DeltaA: " + round(DeltaA).
  print "Velocity at apo: " + round(ApoVelocity).
- print "DV: " + round(DeltaV).
- print "Burn Time (s): " + round(BurnTime).
+
  wait .1.
 }
 
 lock steering to heading (Direction,0).
-print "burning in 2".
-wait 3.
+print "burning in 10".
+wait 10.
 lock throttle to 1.
 print "burning".
 
