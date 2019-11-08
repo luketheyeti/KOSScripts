@@ -20,6 +20,15 @@ function Msg {
  
 }
 
+
+function Log {
+ //Write stuff to log
+//First write headers
+//Then write values
+//Make sure you get the values of the vars
+ 
+}
+
 Msg("test").
 
 
