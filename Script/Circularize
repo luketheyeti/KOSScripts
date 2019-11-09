@@ -1,5 +1,4 @@
 //circularizes at apo
-//parameter TargetAlt.
 parameter Direction.
 
 
@@ -39,42 +38,25 @@ print "time to apo: " + round(eta:apoapsis).
 
 lock steering to prograde.
 //lock steering to Direction.
-wait 3.
-//wait until eta:apoapsis <= BurnTime.
-until eta:apoapsis <= BurnTime{
- clearscreen.
- print "time until apo: " + round(eta:apoapsis).
- print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
- print "Burn Time (s): " + round(BurnTime).
- print "apo: " + round(apoapsis).
- print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
- print "DeltaA: " + round(DeltaA).
- print "Velocity at apo: " + round(ApoVelocity).
- print "DV: " + round(DeltaV).
- print "Burn Time (s): " + round(BurnTime).
- wait .1.
-}
 
 
-print "waiting until burn: " + round(eta:apoapsis - (BurnTime/2)).
-//wait until eta:apoapsis <= (BurnTime / 2) + 10.
-until eta:apoapsis <= (BurnTime / 2) + 10{
+until eta:apoapsis <= (BurnTime / 2) + 5{
  clearscreen.
  print "time until apo: " + round(eta:apoapsis).
  print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
  print "Burn Time (s): " + round(BurnTime).
  print "DV: " + round(DeltaV).
  print "apo: " + round(apoapsis).
- print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
- print "DeltaA: " + round(DeltaA).
+ //print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
+ //print "DeltaA: " + round(DeltaA).
  print "Velocity at apo: " + round(ApoVelocity).
-
  wait .1.
+ 
 }
 
 lock steering to heading (Direction,0).
-print "burning in 10".
-wait 10.
+print "burning in 5".
+wait 5.
 lock throttle to 1.
 print "burning".
 
@@ -86,11 +68,14 @@ until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and peria
  //wait BurnTime.
  //lock throttle to 0.
  clearscreen.
+
  print "apo: " + round(ship:apoapsis).
  print "tapo: " + TargetOrb.
  print "peri: " + round(ship:periapsis).
  print "tperi: " + round(TargetOrb * .99).
+ print "DV: " + round(DeltaV).
  wait .1.
+ 
 }
 
 lock throttle to 0.

@@ -21,6 +21,10 @@ declare Asc3Inc to 1000.
 
 Set TargetAlt to Max(72000,TargetAlt).
 
+///////
+//Functions
+
+
 function Msg {
  parameter mText.
  hudtext(mText,4,2,25,green,false).
@@ -28,41 +32,41 @@ function Msg {
 }
 
 //log launch info
-Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch,Asc3Inc, ascent 3 pitch limit, ascent 3 increment"  to log.txt.
-log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc + ", " + asc3pitch + ", " + asc3inc  to log.txt.
+Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch,Asc3Inc, ascent 3 pitch limit, ascent 3 increment"  to tstolog.txt.
+log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc + ", " + asc3pitch + ", " + asc3inc  to tstolog.txt.
 
 //log headers
-Log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to log.txt.
+Log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to tstolog.txt.
 
 function Flog {
  //Write stuff to log
  //Log "test" to log.txt.
  Declare data to pitch + ", " + (90 - vang( ship:up:vector ,SHIP:PROGRADE:VECTOR )) + ", "+ (90 - vang( ship:up:vector ,SHIP:srfPROGRADE:VECTOR )) + ", " + (ship:velocity:surface:mag) + ", " + ship:altitude + ", " + ship:apoapsis + ", " + max(0,ship:periapsis).
- Log data to log.txt.
+ Log data to tstolog.txt.
 //First write headers
 //Then write values
 //Make sure you get the values of the vars
  
 }
 
-Msg("test").
+///////////////////
 
-
+///
 clearscreen.
 lock throttle to 1.
 lock steering to heading(0,90).
-
+///
 
 
 //countdown
 run countfrom(5).
 
-
 Msg("blastoff!!").
 stage.
 
-
+//////
 //autostager
+//////
 when ship:maxthrust < 1 then {
  Msg("Staging!").
  wait .5.
@@ -82,6 +86,8 @@ if Fairings > 0{
 
 //NAVIGATION
 declare Pitch to 90.
+
+
 //Roll Program
 until ship:velocity:surface:mag >= 40 {
  Flog.
@@ -92,11 +98,11 @@ lock steering to heading((Direction / 2),Pitch).
 Flog.
 wait (Direction/180).
 Flog.
-lock steering to heading(Direction,90).
+lock steering to heading(Direction,Pitch).
 Flog.
 wait 1.
 Flog.
-lock steering to heading(Direction,90).
+lock steering to heading(Direction,Pitch).
 Flog.
 until ship:velocity:surface:mag >= 90{
  Flog.
@@ -170,7 +176,7 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
 /////
 
 //make this an and and max the bottom.
-until Pitch <= 3 or ship:apoapsis >= 72000{ 
+until Pitch <= 3 and ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
   Flog.
@@ -195,8 +201,6 @@ until Pitch <= 3 or ship:apoapsis >= 72000{
 ////////////
 //Final Burn
 //wait until ship:apoapsis >= TargetAlt.
-
-//make this turn down to 1 or 0.
 until Pitch <= 1 and ship:apoapsis >= TargetAlt{
  until ship:apoapsis >= AscApo{
   clearscreen.
@@ -220,9 +224,10 @@ until Pitch <= 1 and ship:apoapsis >= TargetAlt{
 }
 
 /////
+//MECO
 lock throttle to 0.
-/////
 lock steering to prograde.
+
 clearscreen.
 print "apo at destination, throttle off".
 print "final apo: " + round(ship:apoapsis).
