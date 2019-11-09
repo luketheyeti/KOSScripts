@@ -99,8 +99,6 @@ Flog.
 ///
 //autostagers
 ///
-//this might be able to do all staging.
-
 declare maxThrust to ship:maxthrust.
 when ship:maxthrust < maxThrust then {
  print "staging boosters!".
@@ -186,11 +184,8 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
   
  }
 
- //set Pitch to (Pitch - 1).
  set Pitch to max(Asc2pitch,(Pitch - 1)).
- //set AscApo to (AscApo + 1300).
  set AscApo to (AscApo + Asc2inc).
- //set AscApo to (AscApo + 700).
  lock steering to heading (Direction,Pitch).
  Flog.
 
