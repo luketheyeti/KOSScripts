@@ -11,21 +11,34 @@ parameter Direction.
 parameter TargetAlt.
 parameter Fairings.
 
+declare Asc1Pitch to 45.
+declare Asc1Inc to 7.
+declare Asc2Pitch to 15.
+declare Asc2Inc to 1000.
+declare Asc3Pitch to 3.
+declare Asc3Inc to 1000.
+
+
 Set TargetAlt to Max(72000,TargetAlt).
 
 function Msg {
  parameter mText.
- 
  hudtext(mText,4,2,25,green,false).
  
 }
 
+//log launch info
+Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch,Asc3Inc, ascent 3 pitch limit, ascent 3 increment"  to log.txt.
+log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc + ", " + asc3pitch + ", " + asc3inc  to log.txt.
 
-function Log {
+//log headers
+Log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to log.txt.
+
+function Flog {
  //Write stuff to log
- Log "test" to log.txt.
- //Declare data to pitch + ", " + (ship:velocity:surface:mag)
-//Log data to log.txt
+ //Log "test" to log.txt.
+ Declare data to pitch + ", " + (90 - vang( ship:up:vector ,SHIP:PROGRADE:VECTOR )) + ", "+ (90 - vang( ship:up:vector ,SHIP:srfPROGRADE:VECTOR )) + ", " + (ship:velocity:surface:mag) + ", " + ship:altitude + ", " + ship:apoapsis + ", " + max(0,ship:periapsis).
+ Log data to log.txt.
 //First write headers
 //Then write values
 //Make sure you get the values of the vars
@@ -37,17 +50,17 @@ Msg("test").
 
 clearscreen.
 lock throttle to 1.
-lock steering to heading (0,90).
+lock steering to heading(0,90).
+
 
 
 //countdown
-
 run countfrom(5).
 
-print "blastoff!!".
+
+Msg("blastoff!!").
 stage.
-wait 3.
-clearscreen.
+
 
 //autostager
 when ship:maxthrust < 1 then {
@@ -62,74 +75,92 @@ if Fairings > 0{
  when ship:altitude >= 45000 then {
   Msg("Losing Fairings!").
   stage.
-  wait 1.
+  //wait 1.
  }
 }
 
-//Roll Program
-wait until ship:velocity:surface:mag > 40.
-Msg("starting roll program").
-lock steering to heading((Direction / 2),90).
-wait (Direction/180).
-lock steering to heading(Direction,90).
-wait 1.
-lock steering to heading(Direction,90).
 
-wait until ship:velocity:surface:mag >= 90.
+//NAVIGATION
+declare Pitch to 90.
+//Roll Program
+until ship:velocity:surface:mag >= 40 {
+ Flog.
+ Wait .1.
+}
+Msg("starting roll program").
+lock steering to heading((Direction / 2),Pitch).
+Flog.
+wait (Direction/180).
+Flog.
+lock steering to heading(Direction,90).
+Flog.
+wait 1.
+Flog.
+lock steering to heading(Direction,90).
+Flog.
+until ship:velocity:surface:mag >= 90{
+ Flog.
+ Wait .1.
+}
+
 
 //////////
 //Ascent 1
 //////////
 Msg("Starting Turn!").
-declare Pitch to 89.
+//set Pitch to 89.
 declare AscVel to 100.
 
 until Pitch <= 45{ 
  until ship:velocity:surface:mag >= AscVel{
   clearscreen.
+  Flog.
   print "Ascent 1".
+  print "    pitch: " + Pitch.
   print " Velocity: " + round(ship:velocity:surface:mag).
   print "Tvelocity: " + round(AscVel).
   print "      apo: " + round(ship:apoapsis).
   print " altitude: " + round(ship:altitude).
-  print "    pitch: " + Pitch.
   wait .1.
 
  }
 
  //increment by  
- lock steering to heading(Direction,Pitch).
  set Pitch to (Pitch - 1).
  Set AscVel to (AscVel + 7).
+ lock steering to heading(Direction,Pitch).
  
 }
 
 //////////
 //Ascent 2
 //////////
-set Pitch to (Pitch - 1).
+//set Pitch to (Pitch - 1).
 //make this max 15000 or apo plus something.
 declare AscApo to 15000.
 //declare AscApo to (ship:apoapsis + 1000).
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
-until Pitch <= 10 and ship:apoapsis >= 60000{ 
+until Pitch <= asc2pitch and ship:apoapsis >= 60000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
+  Flog.
   print "Ascent 2".
-  print " Velocity: " + round(ship:velocity:surface:mag).
-  print "      apo: " + round(ship:apoapsis).
-  print "     Tapo: " + round(AscApo).
-  print "      alt: " + round(ship:altitude).
   print "    pitch: " + Pitch.
+  print " Velocity: " + round(ship:velocity:surface:mag).
+  print "     Tapo: " + round(AscApo).
+  print "      apo: " + round(ship:apoapsis).
+  print "      alt: " + round(ship:altitude).
   wait .1.
+  
  }
 
- lock steering to heading (Direction,Pitch).
  //set Pitch to (Pitch - 1).
- set Pitch to Max(10,(Pitch - 1)).
- set AscApo to (AscApo + 1000).
+ set Pitch to max(Asc2pitch,(Pitch - 1)).
+ //set AscApo to (AscApo + 1300).
+ set AscApo to (AscApo + Asc2inc).
  //set AscApo to (AscApo + 700).
+  lock steering to heading (Direction,Pitch).
 
 }
 
@@ -137,35 +168,55 @@ until Pitch <= 10 and ship:apoapsis >= 60000{
 /////
 //ascent 3
 /////
+
+//make this an and and max the bottom.
 until Pitch <= 3 or ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
+  Flog.
   print "Ascent 3".
+  print "pitch:" + Pitch.
   print " Velocity: " + round(ship:velocity:surface:mag).
-  print "  apo: " + round(ship:apoapsis).
   print " Tapo: " + round(AscApo).
+  print "  apo: " + round(ship:apoapsis).
   print "  alt: " + round(ship:altitude).
-  print "pitch: " + Pitch.
+  
   wait .1.
+  
  }
 
- lock steering to heading (Direction,Pitch).
- set Pitch to (Pitch - 1).
+ //set Pitch to (Pitch - 1).
+ set Pitch to max(3,(Pitch - 1)).
  set AscApo to (AscApo + 1000).
-
+ lock steering to heading (Direction,Pitch).
+ 
 }
 
 ////////////
 //Final Burn
 //wait until ship:apoapsis >= TargetAlt.
-until ship:apoapsis >= TargetAlt{
- clearscreen.
- print "Final Burn".
- print "apo: " + round(ship:apoapsis).
- print "tApo: " + TargetAlt.
- print " alt: " + round(ship:altitude).
- print "pitch: " + Pitch.
- wait .1.
+
+//make this turn down to 1 or 0.
+until Pitch <= 1 and ship:apoapsis >= TargetAlt{
+ until ship:apoapsis >= AscApo{
+  clearscreen.
+  Flog.
+  print "Final Burn".
+  print "    pitch: " + Pitch.
+  print " Velocity: " + round(ship:velocity:surface:mag).
+  print "     Tapo: " + round(AscApo).
+  print "      apo: " + round(ship:apoapsis).
+  print "      alt: " + round(ship:altitude).
+  
+  wait .1.
+ }
+ 
+
+ //set Pitch to (Pitch - 1).
+ set Pitch to max(1,(Pitch - 1)).
+ set AscApo to (AscApo + 1000).
+ lock steering to heading (Direction,Pitch).
+ 
 }
 
 /////
@@ -174,16 +225,13 @@ lock throttle to 0.
 lock steering to prograde.
 clearscreen.
 print "apo at destination, throttle off".
-wait 1.
 print "final apo: " + round(ship:apoapsis).
-wait 1.
-print "target alt: " + TargetAlt.
-wait 5.
 
 
 //Clear Atmo
 until ship:altitude >= 71000{
  clearscreen.
+ Flog.
  print "waiting to clear atmo".
  print "alt: " + round(ship:altitude).
  print "Talt: 71000".
@@ -205,6 +253,16 @@ run eccentricity.
 //ship stats
 
 print round(ship:liquidfuel).
+
+declare timer to 0.
+until timer > 5 {
+Flog.
+set timer to timer + 1.
+
+wait .1.
+
+
+}
 
 print "goodbye".
 
