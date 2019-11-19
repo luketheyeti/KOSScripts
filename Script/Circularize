@@ -1,4 +1,5 @@
 //circularizes at apo
+//uses flog function from tsto/asto
 parameter Direction.
 
 
@@ -36,12 +37,14 @@ declare TargetOrb to round(Ship:Apoapsis).
 print "target orb: " + TargetOrb.
 print "time to apo: " + round(eta:apoapsis).
 
-lock steering to prograde.
+//lock steering to prograde.
+lock steering to heading (Direction,0).
 //lock steering to Direction.
 
 
 until eta:apoapsis <= (BurnTime / 2) + 5{
  clearscreen.
+ Flog.
  print "time until apo: " + round(eta:apoapsis).
  print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
  print "Burn Time (s): " + round(BurnTime).
@@ -50,10 +53,12 @@ until eta:apoapsis <= (BurnTime / 2) + 5{
  //print "Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
  //print "DeltaA: " + round(DeltaA).
  print "Velocity at apo: " + round(ApoVelocity).
- wait .1.
+ lock steering to heading (Direction,0).
+ wait 1.
  
 }
 
+clearscreen.
 lock steering to heading (Direction,0).
 print "burning in 5".
 wait 5.
@@ -68,7 +73,7 @@ until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and peria
  //wait BurnTime.
  //lock throttle to 0.
  clearscreen.
-
+ Flog.
  print "apo: " + round(ship:apoapsis).
  print "tapo: " + TargetOrb.
  print "peri: " + round(ship:periapsis).

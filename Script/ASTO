@@ -53,7 +53,7 @@ function Flog {
  //Write stuff to log
  //Log "test" to log.txt.
  Declare data to pitch + ", " + (90 - vang(ship:up:vector, SHIP:PROGRADE:VECTOR)) + ", "+ (90 - vang(ship:up:vector, SHIP:srfPROGRADE:VECTOR )) + ", " + (ship:velocity:surface:mag) + ", " + ship:altitude + ", " + ship:apoapsis + ", " + max(0,ship:periapsis).
- Log data to astolog.txt.
+ log data to astolog.txt.
 //First write headers
 //Then write values
 //Make sure you get the values of the vars
@@ -71,13 +71,7 @@ if Fairings > 0{
 
 /////////////////
 
-//logger
-declare logstate to 0.
-when logstate > 0 then {
- Flog.
- wait .1.
- preserve.
-}
+
 
 
 //////
@@ -157,7 +151,7 @@ until Pitch <= 45{
   clearscreen.
   print "Ascent 1".
   AscentInfo.
-  
+  Flog.
   wait .1.
 
  }
@@ -166,7 +160,6 @@ until Pitch <= 45{
  set Pitch to (Pitch - 1).
  Set AscVel to (AscVel + 7).
  lock steering to heading(Direction,Pitch).
- Flog.
  
 }
 Flog.
@@ -185,14 +178,14 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
   clearscreen.
   print "Ascent 2".
   AscentInfo.
+  Flog.
   wait .1.
-  
  }
 
  set Pitch to max(Asc2pitch,(Pitch - 1)).
  set AscApo to (AscApo + Asc2inc).
  lock steering to heading (Direction,Pitch).
- Flog.
+
 
 }
 Flog.
@@ -205,7 +198,7 @@ until Pitch <= 3 and ship:apoapsis >= 72000{
   clearscreen.
   print "Ascent 3".
   AscentInfo.
-  
+  Flog.
   wait .1.
   
  }
@@ -214,7 +207,7 @@ until Pitch <= 3 and ship:apoapsis >= 72000{
  set Pitch to max(3,(Pitch - 1)).
  set AscApo to (AscApo + 1000).
  lock steering to heading (Direction,Pitch).
- Flog.
+
  
 }
 Flog.
@@ -227,7 +220,7 @@ until Pitch <= 1 and ship:apoapsis >= TargetAlt{
   clearscreen.
   print "Final Burn".
   AscentInfo.
-  
+  Flog.
   wait .1.
  }
  
@@ -236,7 +229,6 @@ until Pitch <= 1 and ship:apoapsis >= TargetAlt{
  set Pitch to max(1,(Pitch - 1)).
  set AscApo to (AscApo + 1000).
  lock steering to heading (Direction,Pitch).
- Flog.
  
 }
 Flog.
@@ -259,7 +251,7 @@ until ship:altitude >= 71000{
  print "alt: " + round(ship:altitude).
  print "Talt: 71000".
  print "apo: " + round(ship:apoapsis).
- 
+ Flog.
  wait .1.
 }
 Flog.
@@ -277,9 +269,17 @@ Flog.
 run ShipStats.
 Flog.
 
-
-set logstate to 0.
 Flog.
+
+declare timer to 0.
+until timer > 5 {
+Flog.
+set timer to timer + 1.
+
+wait 1.
+
+
+}
 
 print "goodbye".
 
