@@ -30,6 +30,7 @@ function AscentInfo {
  print "pitch: " + Pitch.
  print " Vel: " + round(ship:velocity:surface:mag).
  print "Target: " + round(AscVel).
+ print "Target: " + round(AscApo).
  print " apo: " + round(ship:apoapsis).
  print " alt: " + round(ship:altitude).
 
@@ -81,6 +82,7 @@ when logstate > 0 then {
 
 //////
 //Launch
+//////
 clearscreen.
 declare Pitch to 90.
 lock throttle to 1.
@@ -98,7 +100,7 @@ Flog.
 
 ///
 //autostagers
-///
+/// make these functions but call them here so you get proper thrust and stuff
 declare maxThrust to ship:maxthrust.
 when ship:maxthrust < maxThrust then {
  print "staging boosters!".
@@ -124,6 +126,9 @@ when ship:maxthrust < 1 then {
 ///////
 //Navigation!!
 ///////
+
+//init all vars so you don't crash
+declare AscApo to 0.
 
 //roll program
 until ship:velocity:surface:mag >= 40 {

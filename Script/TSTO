@@ -29,6 +29,7 @@ function AscentInfo {
  print "pitch: " + Pitch.
  print " Vel: " + round(ship:velocity:surface:mag).
  print "Target: " + round(AscVel).
+ print "Target: " + round(AscApo).
  print " apo: " + round(ship:apoapsis).
  print " alt: " + round(ship:altitude).
 
@@ -67,6 +68,11 @@ function Flog {
  
 }
 
+//nav functions
+
+
+
+
 ///////////////////
 
 ///
@@ -102,7 +108,7 @@ if Fairings > 0{
 
 //NAVIGATION
 declare Pitch to 90.
-
+declare AscApo to 0.
 
 //Roll Program
 until ship:velocity:surface:mag >= 40 {
@@ -169,7 +175,7 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
  }
 
  set Pitch to max(Asc2pitch,(Pitch - 1)).
- set AscApo to (AscApo + Asc2inc).
+ set AscApo to (AscApo + Asc2increment).
  lock steering to heading (Direction,Pitch).
  Flog.
 
