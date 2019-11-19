@@ -11,14 +11,18 @@ parameter Direction.
 parameter TargetAlt.
 parameter Fairings.
 
+//also log wait altitudes
 declare Asc1Pitch to 45.
-declare Asc1increment to 7.
+declare Asc1Increment to 7.
 declare Asc2Pitch to 15.
-declare Asc2increment to 1000.
+declare Asc2Increment to 1000.
 declare Asc3Pitch to 3.
 declare Asc3Increment to 1000.
 
+declare LogState to 1.
 
+
+//safety alt
 Set TargetAlt to Max(72000,TargetAlt).
 
 ///////
@@ -41,6 +45,7 @@ function Msg {
  
 }
 
+//if logstate then
 function StartLog {
 //log launch info
 log "Asc1Pitch ,Asc1increment ,Asc2Pitch,Asc3Increment, ascent 3 pitch limit, ascent 3 increment"  to tstolog.txt.
@@ -60,8 +65,11 @@ StartLog.
 function Flog {
  //Write stuff to log
  //Log "test" to log.txt.
- Declare data to pitch + ", " + (90 - vang( ship:up:vector, SHIP:PROGRADE:VECTOR )) + ", "+ (90 - vang( ship:up:vector, SHIP:srfPROGRADE:VECTOR )) + ", " + (ship:velocity:surface:mag) + ", " + ship:altitude + ", " + ship:apoapsis + ", " + max(0,ship:periapsis).
- Log data to tstolog.txt.
+ if LogState > 0 {
+  Declare data to pitch + ", " + (90 - vang( ship:up:vector, SHIP:PROGRADE:VECTOR )) + ", "+ (90 - vang( ship:up:vector, SHIP:srfPROGRADE:VECTOR )) + ", " + (ship:velocity:surface:mag) + ", " + ship:altitude + ", " + ship:apoapsis + ", " + max(0,ship:periapsis).
+  Log data to tstolog.txt.
+ }
+ 
 //First write headers
 //Then write values
 //Make sure you get the values of the vars
@@ -161,8 +169,8 @@ until Pitch <= 45{
 //////////
 //set Pitch to (Pitch - 1).
 //make this max 15000 or apo plus something.
-declare AscApo to 15000.
-//declare AscApo to (ship:apoapsis + 1000).
+//declare AscApo to 15000.
+declare AscApo to max((ship:apoapsis + Asc2increment), 15000).
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
 until Pitch <= asc2pitch and ship:apoapsis >= 60000{ 
@@ -275,7 +283,7 @@ until timer > 5 {
 Flog.
 set timer to timer + 1.
 
-wait .1.
+wait 1.
 
 
 }
