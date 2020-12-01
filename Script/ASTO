@@ -15,11 +15,8 @@ parameter Fairings.
 
 declare Asc1Pitch to 45.
 declare Asc1Inc to 7.
-declare Asc2Pitch to 15.
+declare Asc2Pitch to 10.
 declare Asc2Inc to 1000.
-declare Asc3Pitch to 3.
-declare Asc3Inc to 1000.
-
 
 Set TargetAlt to Max(85000,TargetAlt).
 
@@ -43,8 +40,8 @@ function Msg {
 }
 
 //log launch info
-Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch,Asc3Inc, ascent 3 pitch limit, ascent 3 increment"  to astolog.txt.
-log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc + ", " + asc3pitch + ", " + asc3inc  to astolog.txt.
+Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch"  to astolog.txt.
+log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc to astolog.txt.
 
 //log headers
 Log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to astolog.txt.
@@ -169,11 +166,13 @@ Flog.
 //////////
 //set Pitch to (Pitch - 1).
 //make this max 15000 or apo plus something.
-declare AscApo to 15000.
-//declare AscApo to (ship:apoapsis + 1000).
+//declare AscApo to 15000.
+
+declare AscApo to max((ship:apoapsis + Asc2inc), 15000).
+
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
-until Pitch <= asc2pitch and ship:apoapsis >= 60000{ 
+until Pitch <= asc2pitch and ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
   print "Ascent 2".
@@ -190,27 +189,7 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
 }
 Flog.
 
-//Ascent 3
-/////
-//make this an and and max the bottom.
-until Pitch <= 3 and ship:apoapsis >= 72000{ 
- until ship:apoapsis >= AscApo{
-  clearscreen.
-  print "Ascent 3".
-  AscentInfo.
-  Flog.
-  wait .1.
-  
- }
 
- //set Pitch to (Pitch - 1).
- set Pitch to max(3,(Pitch - 1)).
- set AscApo to (AscApo + 1000).
- lock steering to heading (Direction,Pitch).
-
- 
-}
-Flog.
 
 ////
 //Final Burn
