@@ -14,12 +14,11 @@ parameter Fairings.
 //also log wait altitudes
 declare Asc1Pitch to 45.
 declare Asc1Increment to 7.
-declare Asc2Pitch to 15.
+declare Asc2Pitch to 10.
 declare Asc2Increment to 1000.
-declare Asc3Pitch to 3.
-declare Asc3Increment to 1000.
 
-declare LogState to 1.
+
+declare LogState to 0.
 
 
 //safety alt
@@ -30,12 +29,12 @@ Set TargetAlt to Max(72000,TargetAlt).
 
 function AscentInfo {
  Flog.
- print "pitch: " + Pitch.
- print " Vel: " + round(ship:velocity:surface:mag).
+ print " pitch: " + Pitch.
+ print "   Vel: " + round(ship:velocity:surface:mag).
  print "Target: " + round(AscVel).
  print "Target: " + round(AscApo).
- print " apo: " + round(ship:apoapsis).
- print " alt: " + round(ship:altitude).
+ print "   apo: " + round(ship:apoapsis).
+ print "   alt: " + round(ship:altitude).
 
 }
 
@@ -48,8 +47,8 @@ function Msg {
 //if logstate then
 function StartLog {
 //log launch info
-log "Asc1Pitch ,Asc1increment ,Asc2Pitch,Asc3Increment, ascent 3 pitch limit, ascent 3 increment"  to tstolog.txt.
-log  asc1pitch + ", " + Asc1increment + ", " + asc2pitch + ", " + Asc2increment + ", " + asc3pitch + ", " + Asc3Increment  to tstolog.txt.
+log "Asc1Pitch ,Asc1increment ,Asc2Pitch,"  to tstolog.txt.
+log  asc1pitch + ", " + Asc1increment + ", " + asc2pitch + ", " + Asc2increment  to tstolog.txt.
 
 //log headers
 declare Headers to "start".
@@ -160,7 +159,7 @@ until Pitch <= 45{
  set Pitch to (Pitch - 1).
  Set AscVel to (AscVel + 7).
  lock steering to heading(Direction,Pitch).
- //Flog.
+ Flog.
  
 }
 
@@ -173,10 +172,9 @@ until Pitch <= 45{
 declare AscApo to max((ship:apoapsis + Asc2increment), 15000).
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
-until Pitch <= asc2pitch and ship:apoapsis >= 60000{ 
+until Pitch <= asc2pitch and ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
-  //Flog.
   print "Ascent 2".
   AscentInfo.
   wait .1.
@@ -186,33 +184,11 @@ until Pitch <= asc2pitch and ship:apoapsis >= 60000{
  set Pitch to max(Asc2pitch,(Pitch - 1)).
  set AscApo to (AscApo + Asc2increment).
  lock steering to heading (Direction,Pitch).
- 
+ Flog.
 
 }
 
 
-/////
-//ascent 3
-/////
-
-//make this an and and max the bottom.
-until Pitch <= asc3pitch and ship:apoapsis >= 72000{ 
- until ship:apoapsis >= AscApo{
-  clearscreen.
-  Flog.
-  print "Ascent 3".
-  AscentInfo.
-  
-  wait .1.
-  
- }
-
- //set Pitch to (Pitch - 1).
- set Pitch to max(asc3pitch,(Pitch - 1)).
- set AscApo to (AscApo + Asc3Increment).
- lock steering to heading (Direction,Pitch).
- 
-}
 
 ////////////
 //Final Burn
@@ -222,7 +198,11 @@ until Pitch <= 1 and ship:apoapsis >= TargetAlt{
   clearscreen.
   Flog.
   print "Final Burn".
-  AscentInfo.
+  print "    pitch: " + Pitch.
+  print " Velocity: " + round(ship:velocity:surface:mag).
+  print "     Tapo: " + round(AscApo).
+  print "      apo: " + round(ship:apoapsis).
+  print "      alt: " + round(ship:altitude).
   
   wait .1.
  }
