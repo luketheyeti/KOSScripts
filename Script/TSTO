@@ -44,26 +44,28 @@ function Msg {
  
 }
 
+//LOGGING
 //if logstate then
 function StartLog {
-//log launch info
-log "Asc1Pitch ,Asc1Increment ,Asc2Pitch, Asc2Increment, Target Alt, Direction"  to tstolog.txt.
-log  asc1pitch + ", " + Asc1increment + ", " + asc2pitch + ", " + Asc2increment + ", " + TargetAlt + ", " +  direction to tstolog.txt.
+ //log launch info
+ log "Asc1Pitch ,Asc1Increment ,Asc2Pitch, Asc2Increment, Target Alt, Direction"  to tstolog.txt.
+ log  asc1pitch + ", " + Asc1increment + ", " + asc2pitch + ", " + Asc2increment + ", " + TargetAlt + ", " +  direction to tstolog.txt.
 
-//log headers
-declare Headers to "start".
-set Headers to Headers + ", " + "test".
-set Headers to Headers + ", " + "more".
+ //log headers
+ declare Headers to "start".
+ set Headers to Headers + ", " + "test".
+ set Headers to Headers + ", " + "more".
 
-log Headers to tstolog.txt.
+ log Headers to tstolog.txt.
 
-log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to tstolog.txt.
+ log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to tstolog.txt.
 }
 
-
+//
 if LogState > 0 {
-	StartLog.
+ StartLog.
 }
+
 function Flog {
  //Write stuff to log
  //Log "test" to log.txt.
@@ -72,20 +74,17 @@ function Flog {
   log data to tstolog.txt.
  }
  
-//First write headers
-//Then write values
-//Make sure you get the values of the vars
+ //First write headers
+ //Then write values
+ //Make sure you get the values of the vars
  
 }
 
-//nav functions
-
-
 
 ///////////////////
 ///////////////////
 
-///
+///Launch
 clearscreen.
 lock throttle to 1.
 lock steering to heading(0,90).
@@ -94,7 +93,6 @@ lock steering to heading(0,90).
 run countfrom(5).
 
 print "Blastoff!".
-Msg("blastoff!!").
 stage.
 wait 1.
 clearscreen.
@@ -216,7 +214,6 @@ until ship:apoapsis >= TargetAlt{
   AscentInfo.
   wait .1.
  }
- 
 
  set Pitch to max(1,(Pitch - 1)).
  //set Pitch to max(1,max(((90 - vang( ship:up:vector, ship:PROGRADE:VECTOR )) -5), (Pitch - 1) )).
@@ -252,19 +249,26 @@ clearscreen.
 print "welcome to space!".
 wait 1.
 
+//
+//log stats
+declare timer to 0.
+until timer > 5 {
+ Flog.
+ set timer to timer + 1.
+ wait 1.
+
+}
+
 ////
 //circularize
 run Circularize(Direction).
 
-////
+///
 //eccentricity
 run eccentricity.
 
-//ship stats
-log "Final Fuel:" to tstolog.txt.
-log round(ship:liquidfuel) to tstolog.txt.
-print round(ship:liquidfuel).
 
+//
 //log final stats
 declare timer to 0.
 until timer > 5 {
@@ -273,6 +277,12 @@ until timer > 5 {
  wait 1.
 
 }
+
+//
+//ship stats
+log "Final Fuel:" to tstolog.txt.
+log round(ship:liquidfuel) to tstolog.txt.
+print round(ship:liquidfuel).
 
 print "goodbye".
 

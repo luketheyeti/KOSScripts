@@ -15,21 +15,24 @@ parameter Fairings.
 
 declare Asc1Pitch to 45.
 declare Asc1Inc to 7.
-declare Asc2Pitch to 10.
+declare Asc2Pitch to 5.
 declare Asc2Inc to 1000.
 
+declare LogState to 1.
+declare targVal to "".
+
+//safety alt
 Set TargetAlt to Max(85000,TargetAlt).
 
 ///////
 //Functions
 
 function AscentInfo {
- print "pitch: " + Pitch.
- print " Vel: " + round(ship:velocity:surface:mag).
- print "Target: " + round(AscVel).
- print "Target: " + round(AscApo).
- print " apo: " + round(ship:apoapsis).
- print " alt: " + round(ship:altitude).
+ print " Pitch: " + Pitch.
+ print "   Vel: " + round(ship:velocity:surface:mag).
+ print targVal.
+ print "   apo: " + round(ship:apoapsis).
+ print "   alt: " + round(ship:altitude).
 
 }
 
@@ -39,12 +42,20 @@ function Msg {
  
 }
 
+//LOGGING
+function StartLog {
 //log launch info
-Log "Asc1Pitch ,Asc1Inc ,Asc2Pitch"  to astolog.txt.
-log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc to astolog.txt.
+log "Asc1Pitch ,Asc1Inc ,Asc2Pitch, TargetAlt, Direction"  to astolog.txt.
+log  asc1pitch + ", " + asc1inc + ", " + asc2pitch + ", " + asc2inc + ", " + TargetAlt + ", " + Direction to astolog.txt.
 
 //log headers
-Log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to astolog.txt.
+log "Pitch, Prograde, surfPrograde, Velocity, Altitude, Apoapsis, Periapsis" to astolog.txt.
+}
+
+//
+if LogState > 0 {
+ StartLog.
+}
 
 function Flog {
  //Write stuff to log
@@ -57,14 +68,7 @@ function Flog {
  
 }
 
-//fairings!
-if Fairings > 0{
- when ship:altitude >= 45000 then {
-  print "losing fairings".
-  stage.
-  wait 1.
- }
-}
+
 
 /////////////////
 
@@ -113,6 +117,14 @@ when ship:maxthrust < 1 then {
  Flog.
 }
 
+//fairings!
+if Fairings > 0{
+ when ship:altitude >= 45000 then {
+  print "losing fairings".
+  stage.
+  wait 1.
+ }
+}
 
 ///////
 //Navigation!!
@@ -172,7 +184,7 @@ declare AscApo to max((ship:apoapsis + Asc2inc), 15000).
 
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
-until Pitch <= asc2pitch and ship:apoapsis >= 72000{ 
+until Pitch <= asc2pitch or ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
   print "Ascent 2".
@@ -183,6 +195,7 @@ until Pitch <= asc2pitch and ship:apoapsis >= 72000{
 
  set Pitch to max(Asc2pitch,(Pitch - 1)).
  set AscApo to (AscApo + Asc2inc).
+ set Asc2Inc to Asc2Inc * 1.01.
  lock steering to heading (Direction,Pitch).
 
 
@@ -194,7 +207,7 @@ Flog.
 ////
 //Final Burn
 ////
-until Pitch <= 1 and ship:apoapsis >= TargetAlt{
+until ship:apoapsis >= TargetAlt{
  until ship:apoapsis >= AscApo{
   clearscreen.
   print "Final Burn".
@@ -206,7 +219,8 @@ until Pitch <= 1 and ship:apoapsis >= TargetAlt{
 
  //set Pitch to (Pitch - 1).
  set Pitch to max(1,(Pitch - 1)).
- set AscApo to (AscApo + 1000).
+ set AscApo to (AscApo + Asc2Inc).
+ set Asc2Inc to Asc2Inc * 1.01.
  lock steering to heading (Direction,Pitch).
  
 }
@@ -243,22 +257,26 @@ wait 1.
 run Circularize(Direction).
 Flog.
 
+declare timer to 0.
+until timer > 5 {
+Flog.
+set timer to timer + 1.
+}
+
 //eccentricity
 //run eccentricity.
 run ShipStats.
 Flog.
 
+log "Final Fuel:" to astolog.txt.
 Flog.
 
-declare timer to 0.
-until timer > 5 {
-Flog.
-set timer to timer + 1.
+
 
 wait 1.
 
 
-}
+
 
 print "goodbye".
 
