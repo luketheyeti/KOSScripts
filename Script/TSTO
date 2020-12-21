@@ -14,7 +14,7 @@ parameter Fairings.
 //also log wait altitudes
 declare Asc1Pitch to 45.
 declare Asc1Increment to 7.
-declare Asc2Pitch to 10.
+declare Asc2Pitch to 5.
 declare Asc2Increment to 1000.
 
 
@@ -106,7 +106,7 @@ when ship:maxthrust < 1 then {
  Msg("Staging!").
  wait .5.
  stage.
- wait 1.
+ //wait 1.
  preserve.
 }
 
@@ -182,7 +182,8 @@ until Pitch <= 45{
 declare AscApo to max((ship:apoapsis + Asc2increment), 15000).
 
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
-until Pitch <= Asc2Pitch and ship:apoapsis >= 72000{ 
+//until Pitch <= Asc2Pitch and ship:apoapsis >= 72000{ 
+until Pitch <= Asc2Pitch or ship:apoapsis >= 72000{ 
  until ship:apoapsis >= AscApo{
   clearscreen.
   print "Ascent 2".
@@ -193,7 +194,7 @@ until Pitch <= Asc2Pitch and ship:apoapsis >= 72000{
  }
 
  set Pitch to max(Asc2pitch,(Pitch - 1)).
-// set Pitch to max(Asc2pitch, max(((90 - vang( ship:up:vector, ship:PROGRADE:VECTOR )) -10), (Pitch - 1) )).
+ //set Pitch to max(Asc2pitch, max(((90 - vang( ship:up:vector, ship:PROGRADE:VECTOR )) -5), (Pitch - 1) )).
  set AscApo to (AscApo + Asc2increment).
  set Asc2Increment to Asc2Increment * 1.01.
  lock steering to heading (Direction,Pitch).
@@ -218,9 +219,10 @@ until ship:apoapsis >= TargetAlt{
  
 
  set Pitch to max(1,(Pitch - 1)).
-// set Pitch to max(1,(90 - vang(ship:up:vector, ship:PROGRADE:VECTOR)) -5).
+ //set Pitch to max(1,max(((90 - vang( ship:up:vector, ship:PROGRADE:VECTOR )) -5), (Pitch - 1) )).
  set AscApo to (AscApo + Asc2Increment).
- set Asc2Increment to Asc2Increment * 1.01.
+ //set Asc2Increment to Asc2Increment * 1.01.
+ set Asc2Increment to Asc2Increment * 1.05.
  lock steering to heading (Direction,Pitch).
  
 }
