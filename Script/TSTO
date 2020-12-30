@@ -182,7 +182,7 @@ declare AscApo to max((ship:apoapsis + Asc2increment), 15000).
 //until Pitch <= 10 or ship:apoapsis >= 60000{ 
 //until Pitch <= Asc2Pitch and ship:apoapsis >= 72000{ 
 until Pitch <= Asc2Pitch or ship:apoapsis >= 72000{ 
- until ship:apoapsis >= AscApo{
+ until Ship:apoapsis >= AscApo{
   clearscreen.
   print "Ascent 2".
   set targVal to " TApo: " + round(AscApo).
@@ -261,11 +261,12 @@ until timer > 5 {
 
 ////
 //circularize
-run Circularize(Direction).
+//run Circularize(Direction).
+run circAtApo(Direction).
 
 ///
 //eccentricity
-run eccentricity.
+run shipStats.
 
 
 //

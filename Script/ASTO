@@ -254,7 +254,8 @@ print "welcome to space!".
 wait 1.
 
 //circularize
-run Circularize(Direction).
+//run Circularize(Direction).
+run circAtApo(Direction).
 Flog.
 
 declare timer to 0.

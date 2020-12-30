@@ -40,6 +40,8 @@ print "time to apo: " + round(eta:apoapsis).
 //lock steering to prograde.
 lock steering to heading (Direction,0).
 //lock steering to Direction.
+//set var to prograde
+//lock steering to var.
 
 
 until eta:apoapsis <= (BurnTime / 2) + 5{
@@ -60,8 +62,7 @@ until eta:apoapsis <= (BurnTime / 2) + 5{
 
 clearscreen.
 lock steering to heading (Direction,0).
-print "burning in 5".
-wait 5.
+run countfrom(5).
 lock throttle to 1.
 print "burning".
 

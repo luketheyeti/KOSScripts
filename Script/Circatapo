@@ -1,25 +1,88 @@
-///circularize script at apo
+//circularizes at apo
+//uses flog function from tsto/asto
+parameter Direction.
 
-parameter direction.
 
+//Math
+//orbital velocity at current apo beight
+set TargetOrbVel to ship:body:radius * sqrt(9.8/(ship:body:radius + apoapsis)).
+//twr?
+set DeltaA to maxthrust/mass.
+//How fast you will be going when you reach your current apo
+set ApoVelocity to sqrt(ship:body:mu * ((2/(ship:body:radius + apoapsis))-(1/ship:obt:semimajoraxis))).
+//DV
+set DeltaV to (TargetOrbVel - ApoVelocity).
+//burn time in seconds
+set BurnTime to DeltaV / DeltaA.
 
-///////////////
-run counttoapo(20).
+declare TargetOrb to round(Ship:Apoapsis).
 
-//set targetorb to (apoapsis * .95).
-set targetorb to (apoapsis - 5000).
-
-print "Apo is " + round(apoapsis).
-print "Target peri is " + round(targetorb).
-
-wait until eta:apoapsis < 15.
-lock steering to heading(direction,0).
-wait until eta:apoapsis < 5.
-print "burning in 5".
+print "         apo: " + round(apoapsis).
+wait .1.
+print "        Diff: " + round(TargetOrbVel - ship:velocity:orbit:mag).
+wait .1.
+print "      DeltaA: " + round(DeltaA).
+wait .1.
+print "Veloc at apo: " + round(ApoVelocity).
+wait .1.
+print "          DV: " + round(DeltaV).
+wait .1.
+print "   Burn Time: " + round(BurnTime).
+wait .1.
+print "  target orb: " + TargetOrb.
+wait .1.
+print " time to apo: " + round(eta:apoapsis).
 wait 5.
-lock throttle to 1.  //change back to .6 for gentle burns.
+clearscreen.
 
-wait until periapsis >= targetorb.
+//lock steering to prograde.
+lock steering to heading (Direction,0).
+//lock steering to Direction.
+//set var to prograde
+//lock steering to var.
+
+
+until eta:apoapsis <= (BurnTime / 2) + 5{
+ clearscreen.
+ Flog.
+ print " time until apo: " + round(eta:apoapsis).
+ print "time until burn: " + round(eta:apoapsis - (BurnTime / 2)).
+ print "  Burn Time (s): " + round(BurnTime).
+ print "             DV: " + round(DeltaV).
+ print "            apo: " + round(apoapsis).
+ print "Velocity at apo: " + round(ApoVelocity).
+ //lock steering to heading (Direction,0).
+ wait 1.
+ 
+}
+
+clearscreen.
+lock steering to heading (Direction,0).
+run countfrom(5).
+lock throttle to 1.
+print "burning".
+
+//print "apo: " + round(ship:apoapsis).
+//wait until periapsis >= (TargetOrb * .95).
+
+until periapsis >= (TargetOrb * .99) or (apoapsis >= (TargetOrb * 105) and periapsis >= max(80000,(TargetOrb * .95))){
+ //wait until periapsis >= 72000.
+ //wait BurnTime.
+ //lock throttle to 0.
+ clearscreen.
+ Flog.
+ print "apo: " + round(ship:apoapsis).
+ print "tapo: " + TargetOrb.
+ print "peri: " + round(ship:periapsis).
+ print "tperi: " + round(TargetOrb * .99).
+ print "DV: " + round(DeltaV).
+ wait .1.
+ 
+}
+
 lock throttle to 0.
 
-run eccentricity.
+clearscreen.
+
+print "welcome to orbit".
+

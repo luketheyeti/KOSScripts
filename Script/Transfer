@@ -1,0 +1,137 @@
+//transfer to the mun.
+//assumes prograde.
+//mun launch angle is 115-130 at 90% mun peri, maybe low as 80?
+
+////
+//params
+parameter trgAngle.
+parameter transferMult.
+
+
+////
+//functions
+
+function MunarAngle{
+ set munLng to Body("Mun"):Longitude.
+ set shipLng to Ship:Longitude.
+ 
+ 
+ if munLng < 0 {
+  set munLng to munLng + 360.
+ }
+ if shipLng < 0 {
+  set shipLng to shipLng + 360.
+ }
+ 
+
+ 
+ //print "Mun Longitude:" + round(munLng).
+ //print "Ship Longitude:" + round(shipLng).
+ //print round(mod(munLng - shipLng + 720, 360)).
+ 
+ return mod(munLng - shipLng + 720, 360).
+}
+
+
+////
+//Start
+////
+
+print "current angle: " + round(MunarAngle()).
+
+wait 5.
+
+//
+//wait for mun angle
+
+//wait until you're on the right orbit.
+until MunarAngle() > trgAngle {
+ clearscreen.
+ print "Mun Longitude:" + round(munLng).
+ print "Ship Longitude:" + round(shipLng).
+ print "current angle:" + round(MunarAngle()).
+ print "target angle:" + trgAngle.
+
+ 
+ wait 1.
+
+}
+
+
+//wait until target angle.
+until MunarAngle() <= trgAngle + 5 {
+ clearscreen.
+ print "Mun Longitude:" + round(munLng).
+ print "Ship Longitude:" + round(shipLng).
+ print "current angle:" + round(MunarAngle()).
+ print "target angle:" + trgAngle.
+ 
+ wait 1.
+}
+
+print "go for mun".
+
+
+//point towards prograde
+lock steering to prograde.
+print "turning towards prograde.".
+wait 5.
+print "facing prograde".
+
+//wait for final angle
+until MunarAngle() <= trgAngle {
+ clearscreen.
+ print "Mun Longitude:" + round(munLng).
+ print "Ship Longitude:" + round(shipLng).
+ print "current angle:" + round(MunarAngle()).
+ print "target angle:" + trgAngle.
+ 
+ wait 1.
+}
+
+print "adjusting final heading".
+
+//ignite engines
+set forward to prograde.
+lock steering to forward.
+lock throttle to 1.
+print "throttle up!".
+
+
+//autostager?
+when ship:maxthrust < 1 then {
+ print "Staging!".
+ wait .5.
+ stage .
+ //wait 1.
+ preserve .
+}
+print "autostage set.".
+
+//wait until higher than muns orbit!
+set trgAlt to Body("Mun"):Apoapsis * transferMult.
+
+
+
+until Ship:Apoapsis > trgAlt {
+ clearscreen.
+ print trgAlt. 
+ print "     apo is: " + round(Ship:Apoapsis).
+ print " Mun apo is: " + round(Body("Mun"):apoapsis).
+ print "Mun peri is: " + round(Body("Mun"):periapsis).
+ 
+ wait .1.
+}
+
+//cut engines
+ lock throttle to 0.
+ 
+ if Ship:obt:body:name <> "Kerbin" print "not orbiting kerbin".
+ 
+
+
+
+
+
+
+
